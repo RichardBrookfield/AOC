@@ -1,4 +1,8 @@
 **/.vs
+**/.vscode
 **/Results.txt
 **/*.ssmssln
+
 **/Day 11 Alt
+
+**/Day*.txt
