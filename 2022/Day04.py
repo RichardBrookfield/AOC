@@ -10,18 +10,18 @@ def partial_overlap(a1: int, a2: int, b1: int, b2: int):
 
 
 def main(day: int, input_type: str):
-    with open(f'input/{input_type}/Day{str(day).zfill(2)}.txt', 'r') as f:
+    with open(f"input/{input_type}/Day{str(day).zfill(2)}.txt", "r") as f:
         lines = f.readlines()
 
     full_count = 0
     partial_count = 0
 
     for line in lines:
-        line = line.rstrip('\n')
+        line = line.rstrip("\n")
 
-        ranges = line.split(',')
-        from1, to1 = [int(i) for i in ranges[0].split('-')]
-        from2, to2 = [int(i) for i in ranges[1].split('-')]
+        ranges = line.split(",")
+        from1, to1 = [int(i) for i in ranges[0].split("-")]
+        from2, to2 = [int(i) for i in ranges[1].split("-")]
 
         if full_overlap(from1, to1, from2, to2):
             full_count += 1
@@ -29,12 +29,12 @@ def main(day: int, input_type: str):
         if partial_overlap(from1, to1, from2, to2):
             partial_count += 1
 
-    print(f'{input_type:>6} Part 1: {full_count}')
-    print(f'{input_type:>6} Part 2: {partial_count}')
+    print(f"{input_type:>6} Part 1: {full_count}")
+    print(f"{input_type:>6} Part 2: {partial_count}")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     day = int(os.path.basename(__file__)[3:5])
 
-    main(day, 'Test')
-    main(day, 'Puzzle')
+    main(day, "Test")
+    main(day, "Puzzle")

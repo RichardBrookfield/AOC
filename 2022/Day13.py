@@ -14,8 +14,7 @@ def custom_sort(lines):
                 lowest_offset = other
 
         if lowest_offset != lowest:
-            lines[lowest], lines[lowest_offset] = \
-                lines[lowest_offset], lines[lowest]
+            lines[lowest], lines[lowest_offset] = lines[lowest_offset], lines[lowest]
 
 
 def compare(list1, list2):
@@ -50,7 +49,7 @@ def compare(list1, list2):
 
 
 def main(day: int, input_type: str):
-    with open(f'input/{input_type}/Day{str(day).zfill(2)}.txt', 'r') as f:
+    with open(f"input/{input_type}/Day{str(day).zfill(2)}.txt", "r") as f:
         lines = f.readlines()
 
     pair_index = 1
@@ -59,7 +58,7 @@ def main(day: int, input_type: str):
     list1, list2, filled_lines = [], [], []
 
     for line in lines:
-        line = line.rstrip('\n')
+        line = line.rstrip("\n")
 
         if not line:
             if compare(list1, list2) == -1:
@@ -79,7 +78,7 @@ def main(day: int, input_type: str):
 
         filled_lines.append(line_value)
 
-    print(f'{input_type:>6} Part 1: {index_total}')
+    print(f"{input_type:>6} Part 1: {index_total}")
 
     dividers = [[[2]], [[6]]]
 
@@ -88,14 +87,13 @@ def main(day: int, input_type: str):
 
     custom_sort(filled_lines)
 
-    markers = [filled_lines.index(dividers[0]) + 1,
-               filled_lines.index(dividers[1]) + 1]
+    markers = [filled_lines.index(dividers[0]) + 1, filled_lines.index(dividers[1]) + 1]
 
-    print(f'{input_type:>6} Part 2: {markers[0] * markers[1]}')
+    print(f"{input_type:>6} Part 2: {markers[0] * markers[1]}")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     day = int(os.path.basename(__file__)[3:5])
 
-    main(day, 'Test')
-    main(day, 'Puzzle')
+    main(day, "Test")
+    main(day, "Puzzle")

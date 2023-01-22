@@ -2,26 +2,22 @@ import os
 
 
 def main(day: int, input_type: str):
-    with open(f'input/{input_type}/Day{str(day).zfill(2)}.txt', 'r') as f:
+    with open(f"input/{input_type}/Day{str(day).zfill(2)}.txt", "r") as f:
         lines = f.readlines()
 
     cubes = []
 
     for line in lines:
-        line = line.rstrip('\n')
+        line = line.rstrip("\n")
 
-        x, y, z = [int(value) for value in line.split(',')]
+        x, y, z = [int(value) for value in line.split(",")]
         cubes.append([x, y, z])
 
     cube_count = len(cubes)
     adjacent = 0
 
     # Find adjacent cubes in specific axis direction, eliminating duplication.
-    positive_offsets = [
-        [1, 0, 0],
-        [0, 1, 0],
-        [0, 0, 1]
-    ]
+    positive_offsets = [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
 
     for cube in cubes:
         for po in positive_offsets:
@@ -32,7 +28,7 @@ def main(day: int, input_type: str):
 
     exposed = cube_count * 6 - adjacent * 2
 
-    print(f'{input_type:>6} Part 1: {exposed}')
+    print(f"{input_type:>6} Part 1: {exposed}")
 
     min_coord = [cubes[0][0], cubes[0][1], cubes[0][2]]
     max_coord = [cubes[0][0], cubes[0][1], cubes[0][2]]
@@ -52,7 +48,7 @@ def main(day: int, input_type: str):
         [0, 0, 1],
         [-1, 0, 0],
         [0, -1, 0],
-        [0, 0, -1]
+        [0, 0, -1],
     ]
 
     flood_fill = []
@@ -66,15 +62,16 @@ def main(day: int, input_type: str):
                 outside = False
 
                 for i in range(3):
-                    if new_position[i] < min_coord[i] or \
-                            new_position[i] > max_coord[i]:
+                    if new_position[i] < min_coord[i] or new_position[i] > max_coord[i]:
                         outside = True
                         break
 
-                if outside or \
-                        new_position in cubes or \
-                        new_position in flood_fill or \
-                        new_position in newest_items:
+                if (
+                    outside
+                    or new_position in cubes
+                    or new_position in flood_fill
+                    or new_position in newest_items
+                ):
                     continue
 
                 newest_items.append(new_position)
@@ -96,11 +93,11 @@ def main(day: int, input_type: str):
             if delta_cube in flood_fill:
                 flood_adjacent += 1
 
-    print(f'{input_type:>6} Part 2: {flood_adjacent}')
+    print(f"{input_type:>6} Part 2: {flood_adjacent}")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     day = int(os.path.basename(__file__)[3:5])
 
-    main(day, 'Test')
-    main(day, 'Puzzle')
+    main(day, "Test")
+    main(day, "Puzzle")

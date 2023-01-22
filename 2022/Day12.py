@@ -39,17 +39,14 @@ def find_route(heights, start, end_height: int, going_up: bool = True):
             for m in moves:
                 new = [point[0] + m[0], point[1] + m[1]]
 
-                if new[0] < 0 or new[0] >= rows or \
-                        new[1] < 0 or new[1] >= columns:
+                if new[0] < 0 or new[0] >= rows or new[1] < 0 or new[1] >= columns:
                     continue
 
                 if going_up:
-                    if heights[new[0]][new[1]] > \
-                            heights[point[0]][point[1]] + 1:
+                    if heights[new[0]][new[1]] > heights[point[0]][point[1]] + 1:
                         continue
                 else:
-                    if heights[new[0]][new[1]] < \
-                            heights[point[0]][point[1]] - 1:
+                    if heights[new[0]][new[1]] < heights[point[0]][point[1]] - 1:
                         continue
 
                 new_offset = offset_from_point(new, columns)
@@ -66,7 +63,7 @@ def find_route(heights, start, end_height: int, going_up: bool = True):
 
 
 def main(day: int, input_type: str):
-    with open(f'input/{input_type}/Day{str(day).zfill(2)}.txt', 'r') as f:
+    with open(f"input/{input_type}/Day{str(day).zfill(2)}.txt", "r") as f:
         lines = f.readlines()
 
     rows = 0
@@ -74,13 +71,13 @@ def main(day: int, input_type: str):
     high_point = 27
 
     for line in lines:
-        line = line.rstrip('\n')
+        line = line.rstrip("\n")
         heights.append([])
 
         for c in line:
             if c.islower():
-                height = ord(c) - ord('a') + 1
-            elif c == 'S':
+                height = ord(c) - ord("a") + 1
+            elif c == "S":
                 height = 0
                 start = [rows, len(heights[rows])]
             else:
@@ -92,14 +89,14 @@ def main(day: int, input_type: str):
         rows += 1
 
     best_route_part1 = find_route(heights, start, high_point)
-    print(f'{input_type:>6} Part 1: {best_route_part1}')
+    print(f"{input_type:>6} Part 1: {best_route_part1}")
 
     best_route_part2 = find_route(heights, end, 1, going_up=False)
-    print(f'{input_type:>6} Part 2: {best_route_part2}')
+    print(f"{input_type:>6} Part 2: {best_route_part2}")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     day = int(os.path.basename(__file__)[3:5])
 
-    main(day, 'Test')
-    main(day, 'Puzzle')
+    main(day, "Test")
+    main(day, "Puzzle")

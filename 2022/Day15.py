@@ -48,10 +48,7 @@ def combine_intervals(interval1, interval2):
             combined.append(item2)
             interval2 = interval2[1:]
         else:
-            combined.append([
-                min(item1[0], item2[0]),
-                max(item1[1], item2[1])
-                ])
+            combined.append([min(item1[0], item2[0]), max(item1[1], item2[1])])
             interval1 = interval1[1:]
             interval2 = interval2[1:]
 
@@ -126,14 +123,14 @@ def excluded_on_row(row, sensors, distances) -> set:
 
 
 def main(day: int, input_type: str):
-    with open(f'input/{input_type}/Day{str(day).zfill(2)}.txt', 'r') as f:
+    with open(f"input/{input_type}/Day{str(day).zfill(2)}.txt", "r") as f:
         lines = f.readlines()
 
     sensors, beacons, nearest, distances = [], [], [], []
 
     for line in lines:
-        line = line.rstrip('\n')
-        parts = line.split(' ')
+        line = line.rstrip("\n")
+        parts = line.split(" ")
         sensors.append([int(parts[2][2:-1]), int(parts[3][2:-1])])
 
         x, y = int(parts[-2][2:-1]), int(parts[-1][2:])
@@ -145,7 +142,7 @@ def main(day: int, input_type: str):
         distance = manhattan_distance(sensors[-1], beacons[nearest[-1]])
         distances.append(distance)
 
-    if input_type == 'Test':
+    if input_type == "Test":
         test_row = 10
         extent = 20
     else:
@@ -158,7 +155,7 @@ def main(day: int, input_type: str):
     for b in [b for b in beacons if b[1] == test_row]:
         excluded = remove_from_interval(excluded, b[0])
 
-    print(f'{input_type:>6} Part 1: {items_in_interval(excluded)}')
+    print(f"{input_type:>6} Part 1: {items_in_interval(excluded)}")
 
     tuning_frequency = -1
 
@@ -171,14 +168,14 @@ def main(day: int, input_type: str):
             break
 
         if x % 100000 == 0:
-            print(f'Progress {x:>8}')
+            print(f"Progress {x:>8}")
 
-    print(f'{input_type:>6} Part 2: {tuning_frequency}')
+    print(f"{input_type:>6} Part 2: {tuning_frequency}")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     day = int(os.path.basename(__file__)[3:5])
 
     # Takes a few minutes but gets there eventually.
-    main(day, 'Test')
-    main(day, 'Puzzle')
+    main(day, "Test")
+    main(day, "Puzzle")

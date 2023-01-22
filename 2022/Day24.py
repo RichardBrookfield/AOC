@@ -2,7 +2,7 @@ import os
 
 
 def main(day: int, input_type: str):
-    with open(f'input/{input_type}/Day{str(day).zfill(2)}.txt', 'r') as f:
+    with open(f"input/{input_type}/Day{str(day).zfill(2)}.txt", "r") as f:
         lines = f.readlines()
 
     max_row = len(lines)
@@ -13,28 +13,28 @@ def main(day: int, input_type: str):
     row = 0
 
     for line in lines:
-        line = line.rstrip('\n')
+        line = line.rstrip("\n")
 
         for column in range(len(line)):
             pos = [row, column]
             char = line[column]
 
             if row == 0:
-                if char == '.':
+                if char == ".":
                     route.append(pos)
             elif row == len(lines) - 1:
-                if char == '.':
+                if char == ".":
                     route.append(pos)
-            elif char == '#':
+            elif char == "#":
                 pass
-            elif char != '.':
+            elif char != ".":
                 blizzards.append(pos)
 
-                if char == '<':
+                if char == "<":
                     directions.append([0, -1])
-                elif char == '>':
+                elif char == ">":
                     directions.append([0, 1])
-                elif char == '^':
+                elif char == "^":
                     directions.append([-1, 0])
                 else:
                     directions.append([1, 0])
@@ -71,20 +71,22 @@ def main(day: int, input_type: str):
 
                 if new_position == route[1]:
                     if route_phase == 0:
-                        print(f'{input_type:>6} Part 1: {round}')
+                        print(f"{input_type:>6} Part 1: {round}")
                         route_phase += 1
                     elif route_phase == 4:
-                        print(f'{input_type:>6} Part 2: {round}')
+                        print(f"{input_type:>6} Part 2: {round}")
                         route_phase += 1
 
                 if new_position == route[0]:
                     if route_phase == 2:
                         route_phase += 1
 
-                if 1 <= new_position[0] < max_row - 1 and \
-                        1 <= new_position[1] < max_column - 1 and \
-                        new_position not in blizzards or \
-                        new_position in route:
+                if (
+                    1 <= new_position[0] < max_row - 1
+                    and 1 <= new_position[1] < max_column - 1
+                    and new_position not in blizzards
+                    or new_position in route
+                ):
                     new_positions.add(tuple(new_position))
 
         if route_phase == 1:
@@ -100,11 +102,11 @@ def main(day: int, input_type: str):
 
         if round >= 50 and round % 20 == 0:
             positions = len(explorer_positions)
-            print(f'Progress: {round:>4} {route_phase} {positions}')
+            print(f"Progress: {round:>4} {route_phase} {positions}")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     day = int(os.path.basename(__file__)[3:5])
 
-    main(day, 'Test')
-    main(day, 'Puzzle')
+    main(day, "Test")
+    main(day, "Puzzle")
