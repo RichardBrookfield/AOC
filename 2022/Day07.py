@@ -80,7 +80,7 @@ def main(day: int, input_type: str):
     print(f"{input_type:>6} Part 2: {selected_size}")
 
 
-if __name__ == "__main_":
+if __name__ == "__main__":
     day = int(os.path.basename(__file__)[3:5])
 
     main(day, "Test")
