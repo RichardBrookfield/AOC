@@ -205,7 +205,7 @@ def test_blueprint(blueprints, blueprint_offset: int, time_limit):
                     show_best(blueprint_offset, best_geode, copy_materials)
 
             # After adding to the manufacturing list, try extending all the way to end.
-            # But only if there's at least one obsidian robot.
+            # But only if there's at least one geode robot.
             if w[m_robots][3] > 0:
                 copy_materials = copy.deepcopy(w)
 
