@@ -1,4 +1,4 @@
-import os
+from pathlib import PurePath
 
 
 def update_crt(crt, cycle, x):
@@ -11,8 +11,8 @@ def update_crt(crt, cycle, x):
         crt[crt_row_position][crt_character_position] = "#"
 
 
-def main(day: int, input_type: str):
-    with open(f"input/{input_type}/Day{str(day).zfill(2)}.txt", "r") as f:
+def main(day: int, input_path: str, input_type: str):
+    with open(f"{input_path}/{input_type}/Day{day:02}.txt", "r") as f:
         lines = f.readlines()
 
     x, cycle, total = 1, 1, 0
@@ -48,7 +48,9 @@ def main(day: int, input_type: str):
 
 
 if __name__ == "__main__":
-    day = int(os.path.basename(__file__)[3:5])
+    here = PurePath(__file__)
+    day = int(here.name[3:5])
+    input_path = f"../../AOCdata/{here.parent.name}"
 
-    main(day, "Test")
-    main(day, "Puzzle")
+    main(day, input_path, "Test")
+    main(day, input_path, "Puzzle")

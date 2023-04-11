@@ -1,4 +1,4 @@
-import os
+from pathlib import PurePath
 
 
 def adjust_tail(rope, positions, offset):
@@ -33,8 +33,8 @@ def adjust_tail(rope, positions, offset):
     positions[offset].add(f"{rope[offset]['x']},{rope[offset]['y']}")
 
 
-def main(day: int, input_type: str, snake_size: int, suffix: str = ""):
-    filename = f"input/{input_type}/Day{str(day).zfill(2)}{suffix}.txt"
+def main(day: int, input_path: str, input_type: str, snake_size: int, suffix: str = ""):
+    filename = f"{input_path}/{input_type}/Day{day:02}{suffix}.txt"
 
     with open(filename, "r") as f:
         lines = f.readlines()
@@ -76,8 +76,10 @@ def main(day: int, input_type: str, snake_size: int, suffix: str = ""):
 
 
 if __name__ == "__main__":
-    day = int(os.path.basename(__file__)[3:5])
+    here = PurePath(__file__)
+    day = int(here.name[3:5])
+    input_path = f"../../AOCdata/{here.parent.name}"
 
-    main(day, "Test", 2, "-1")
-    main(day, "Test", 10, "-2")
-    main(day, "Puzzle", 10)
+    main(day, input_path, "Test", 2, "-1")
+    main(day, input_path, "Test", 10, "-2")
+    main(day, input_path, "Puzzle", 10)

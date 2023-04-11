@@ -1,4 +1,4 @@
-import os
+from pathlib import PurePath
 
 
 def ground_height(ground):
@@ -8,10 +8,10 @@ def ground_height(ground):
 # Trim off the lower levels to keep it fast.
 def trim_ground(ground, margin):
     max_height = ground_height(ground)
-    
+
     for g in [g for g in ground if g[0] < max_height - margin]:
         ground.remove(g)
-        
+
     return max_height - margin
 
 
@@ -69,8 +69,8 @@ def drop_rock(ground, directions, rock, direction, level):
     return direction
 
 
-def main(day: int, input_type: str):
-    with open(f"input/{input_type}/Day{str(day).zfill(2)}.txt", "r") as f:
+def main(day: int, input_path: str, input_type: str):
+    with open(f"{input_path}/{input_type}/Day{day:02}.txt", "r") as f:
         lines = f.readlines()
 
     # Array of offsets from the leftmost, the lowest row second item.
@@ -117,9 +117,7 @@ def main(day: int, input_type: str):
                 height_delta = ground_height(ground) - saved_height
                 rock_count_delta = rock_count - saved_rock_count
 
-                deltas = int(
-                    (rock_limit_part2 - rock_count) / rock_count_delta
-                )
+                deltas = int((rock_limit_part2 - rock_count) / rock_count_delta)
                 height_offset = deltas * height_delta
                 rock_count += deltas * rock_count_delta
                 zero_point += 1
@@ -137,7 +135,9 @@ def main(day: int, input_type: str):
 
 
 if __name__ == "__main__":
-    day = int(os.path.basename(__file__)[3:5])
+    here = PurePath(__file__)
+    day = int(here.name[3:5])
+    input_path = f"../../AOCdata/{here.parent.name}"
 
-    main(day, "Test")
-    main(day, 'Puzzle')
+    main(day, input_path, "Test")
+    main(day, input_path, "Puzzle")

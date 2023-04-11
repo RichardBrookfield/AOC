@@ -1,4 +1,4 @@
-import os
+from pathlib import PurePath
 
 
 def manhattan_distance(point0, point1) -> int:
@@ -122,8 +122,8 @@ def excluded_on_row(row, sensors, distances) -> set:
     return all_excluded
 
 
-def main(day: int, input_type: str):
-    with open(f"input/{input_type}/Day{str(day).zfill(2)}.txt", "r") as f:
+def main(day: int, input_path: str, input_type: str):
+    with open(f"{input_path}/{input_type}/Day{day:02}.txt", "r") as f:
         lines = f.readlines()
 
     sensors, beacons, nearest, distances = [], [], [], []
@@ -174,8 +174,10 @@ def main(day: int, input_type: str):
 
 
 if __name__ == "__main__":
-    day = int(os.path.basename(__file__)[3:5])
+    here = PurePath(__file__)
+    day = int(here.name[3:5])
+    input_path = f"../../AOCdata/{here.parent.name}"
 
     # Takes a few minutes but gets there eventually.
-    main(day, "Test")
-    main(day, "Puzzle")
+    main(day, input_path, "Test")
+    main(day, input_path, "Puzzle")
