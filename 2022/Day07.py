@@ -1,8 +1,9 @@
 from pathlib import PurePath
+from typing import Dict, List
 
 
-def read_filestore(lines):
-    filestore = {}
+def read_filestore(lines: List[str]) -> Dict[str, int]:
+    filestore: Dict[str, int] = {}
     current_path = "/"
     folder_listing = False
 
@@ -32,7 +33,7 @@ def read_filestore(lines):
     return filestore
 
 
-def calculate_folder_sizes(filestore):
+def calculate_folder_sizes(filestore: Dict[str, int]) -> Dict[str, int]:
     folder_sizes = {"/": 0}
 
     for folder in [k for k, v in filestore.items() if v == 0]:
@@ -47,7 +48,7 @@ def calculate_folder_sizes(filestore):
     return folder_sizes
 
 
-def calculate_total_sizes(folder_sizes):
+def calculate_total_sizes(folder_sizes: Dict[str, int]) -> Dict[str, int]:
     total_sizes = {"/": 0}
 
     for k in folder_sizes.keys():
@@ -69,7 +70,7 @@ def main(day: int, input_path: str, input_type: str):
     folder_sizes = calculate_folder_sizes(filestore)
     total_sizes = calculate_total_sizes(folder_sizes)
 
-    small_folders = sum(v for k, v in total_sizes.items() if v < 100000)
+    small_folders = sum(v for _, v in total_sizes.items() if v < 100000)
 
     print(f"{input_type:>6} Part 1: {small_folders}")
 

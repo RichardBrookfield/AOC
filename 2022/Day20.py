@@ -1,7 +1,8 @@
 from pathlib import PurePath
+from typing import List
 
 
-def mix(numbers, number):
+def mix(numbers: List[str], number: str) -> List[str]:
     value = int(number.rstrip("x"))
     new_index = numbers.index(number) + value
 
@@ -11,12 +12,12 @@ def mix(numbers, number):
     return numbers[:new_index] + [number] + numbers[new_index:]
 
 
-def get_digit(numbers, offset):
+def get_digit(numbers: List[str], offset: int) -> int:
     zero_index = numbers.index("0")
     return int(numbers[(zero_index + offset) % (len(numbers))].rstrip("x"))
 
 
-def get_digits(numbers):
+def get_digits(numbers: List[str]):
     return (
         get_digit(numbers, 1000) + get_digit(numbers, 2000) + get_digit(numbers, 3000)
     )
@@ -26,8 +27,8 @@ def main(day: int, input_path: str, input_type: str):
     with open(f"{input_path}/{input_type}/Day{day:02}.txt", "r") as f:
         lines = f.readlines()
 
-    numbers_part1 = []
-    numbers_part2 = []
+    numbers_part1: List[str] = []
+    numbers_part2: List[str] = []
 
     for line in lines:
         line_part1 = line.rstrip("\n")

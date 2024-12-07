@@ -1,11 +1,12 @@
 from pathlib import PurePath
+from typing import List
 
 
 def main(day: int, input_path: str, input_type: str):
     with open(f"{input_path}/{input_type}/Day{day:02}.txt", "r") as f:
         lines = f.readlines()
 
-    cubes = []
+    cubes: List[List[int]] = []
 
     for line in lines:
         line = line.rstrip("\n")
@@ -51,9 +52,9 @@ def main(day: int, input_path: str, input_type: str):
         [0, 0, -1],
     ]
 
-    flood_fill = []
-    new_items = [[min_coord[0], min_coord[1], min_coord[2]]]
-    newest_items = []
+    flood_fill: List[List[int]] = []
+    new_items: List[List[int]] = [[min_coord[0], min_coord[1], min_coord[2]]]
+    newest_items: List[List[int]] = []
 
     while len(new_items) != 0:
         for ni in new_items:

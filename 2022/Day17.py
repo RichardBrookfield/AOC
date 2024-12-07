@@ -1,12 +1,13 @@
 from pathlib import PurePath
+from typing import List, Tuple
 
 
-def ground_height(ground):
+def ground_height(ground: List[List[int]]) -> int:
     return max([g[0] for g in ground]) if ground else 0
 
 
 # Trim off the lower levels to keep it fast.
-def trim_ground(ground, margin):
+def trim_ground(ground: List[List[int]], margin: int):
     max_height = ground_height(ground)
 
     for g in [g for g in ground if g[0] < max_height - margin]:
@@ -15,11 +16,17 @@ def trim_ground(ground, margin):
     return max_height - margin
 
 
-def drop_rock(ground, directions, rock, direction, level):
+def drop_rock(
+    ground: List[List[int]],
+    directions: str,
+    rock: Tuple[List[List[int]], int],
+    direction: int,
+    level: int,
+):
     max_row = ground_height(ground) if ground else -1
     start_row = max_row + 4 - rock[1]
 
-    rock_coords = []
+    rock_coords: List[List[int]] = []
 
     for c in rock[0]:
         rock_coords.append([c[0] + start_row, c[1] + 2])
@@ -29,7 +36,7 @@ def drop_rock(ground, directions, rock, direction, level):
         column_offset = 1 if directions[direction] == ">" else -1
         direction = (direction + 1) % len(directions)
 
-        new_coords = []
+        new_coords: List[List[int]] = []
         for rc in rock_coords:
             new_coords.append([rc[0], rc[1] + column_offset])
 
@@ -74,15 +81,15 @@ def main(day: int, input_path: str, input_type: str):
         lines = f.readlines()
 
     # Array of offsets from the leftmost, the lowest row second item.
-    rocks = [
-        [[[0, 0], [0, 1], [0, 2], [0, 3]], 0],
-        [[[0, 0], [-1, 1], [0, 1], [1, 1], [0, 2]], -1],
-        [[[0, 0], [0, 1], [0, 2], [1, 2], [2, 2]], 0],
-        [[[0, 0], [1, 0], [2, 0], [3, 0]], 0],
-        [[[0, 0], [0, 1], [1, 0], [1, 1]], 0],
+    rocks: List[Tuple[List[List[int]], int]] = [
+        ([[0, 0], [0, 1], [0, 2], [0, 3]], 0),
+        ([[0, 0], [-1, 1], [0, 1], [1, 1], [0, 2]], -1),
+        ([[0, 0], [0, 1], [0, 2], [1, 2], [2, 2]], 0),
+        ([[0, 0], [1, 0], [2, 0], [3, 0]], 0),
+        ([[0, 0], [0, 1], [1, 0], [1, 1]], 0),
     ]
-    directions = []
-    ground = []
+    directions = ""
+    ground: List[List[int]] = []
     total_rocks = len(rocks)
 
     for line in lines:
@@ -96,6 +103,9 @@ def main(day: int, input_path: str, input_type: str):
     height_offset = 0
     rock_limit_start = max(2022, total_rocks * len(directions))
     rock_limit_part2 = 1000000000000
+    saved_direction = ""
+    saved_height = 0
+    saved_rock_count = 0
 
     while rock_count <= rock_limit_part2:
         direction = drop_rock(

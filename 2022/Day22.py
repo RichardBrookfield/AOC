@@ -1,7 +1,8 @@
 from pathlib import PurePath
+from typing import List, Tuple
 
 
-def bounds_mapping(max_rows):
+def bounds_mapping(max_rows: int) -> List[List[int]]:
     # Basically, as an array (for ease), the following items to map one edge to
     # the corresponding edge elsewhere, 5 edges are adjacent in the net,
     # leaving 7 to be mapped.  If done carefully we can search it "backwards".
@@ -36,15 +37,17 @@ def bounds_mapping(max_rows):
         ]
 
 
-def in_range(value, start, end):
+def in_range(value: int, start: int, end: int) -> bool:
     return start <= value <= end if start <= end else end <= value <= start
 
 
-def opposite(direction):
+def opposite(direction: int) -> int:
     return (direction + 2) % 4
 
 
-def get_mapped_position(position, direction, max_row):
+def get_mapped_position(
+    position: List[int], direction: int, max_row: int
+) -> Tuple[List[int], int]:
     mapping = bounds_mapping(max_row)
 
     for m in mapping:
@@ -103,7 +106,14 @@ def get_mapped_position(position, direction, max_row):
     assert False
 
 
-def follow_path(board, max_row, max_column, path, start_column, iscube):
+def follow_path(
+    board: List[List[int]],
+    max_row: int,
+    max_column: int,
+    path: List[str | int],
+    start_column: int,
+    iscube: bool,
+) -> int:
     moves = [[0, 1], [1, 0], [0, -1], [-1, 0]]
 
     position = [0, start_column]
@@ -151,7 +161,7 @@ def follow_path(board, max_row, max_column, path, start_column, iscube):
 
                 if board[new[0]][new[1]] == 2:
                     break
-                else:
+                elif type(item) == int:
                     item -= 1
 
                 position = new
@@ -163,7 +173,11 @@ def follow_path(board, max_row, max_column, path, start_column, iscube):
     return 1000 * (position[0] + 1) + 4 * (position[1] + 1) + direction
 
 
-def print_board(board, position1=None, position2=None):
+def print_board(
+    board: List[List[int]],
+    position1: List[int] = [],
+    position2: List[int] = [],
+):
     print(f"Pos 1: {position1}   Pos 2: {position2}")
 
     for row in range(len(board)):
@@ -186,8 +200,8 @@ def print_board(board, position1=None, position2=None):
         print(f"{row:>2}: {line}")
 
 
-def read_path(path: str):
-    instructions = []
+def read_path(path: str) -> List[str | int]:
+    instructions: List[str | int] = []
 
     length = 0
 
@@ -211,10 +225,13 @@ def read_path(path: str):
     return instructions
 
 
-def read_board(lines, board, max_column):
+def read_board(
+    lines: List[str], board: List[List[int]], max_column: int
+) -> Tuple[List[str | int], int, int]:
     max_row = 0
     empty_row = [0] * max_column
     start_column = None
+    path = []
 
     for line in lines:
         line = line.rstrip("\n")
@@ -241,14 +258,14 @@ def read_board(lines, board, max_column):
 
         max_row += 1
 
-    return path, max_row, start_column
+    return path, max_row, start_column or 0
 
 
 def main(day: int, input_path: str, input_type: str):
     with open(f"{input_path}/{input_type}/Day{day:02}.txt", "r") as f:
         lines = f.readlines()
 
-    board = []
+    board: List[List[int]] = []
     max_column = max([len(line) for line in lines])
 
     path, max_row, start_column = read_board(lines, board, max_column)

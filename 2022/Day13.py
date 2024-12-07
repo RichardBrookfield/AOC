@@ -1,11 +1,12 @@
-from pathlib import PurePath
 import ast
+from pathlib import PurePath
+from typing import Any, List
 
 
 # Tried this using sorted(... key=functools.cmp_to_key(compare))
 # But is caused some sort of recursion issue.
 # Simple selection sort.
-def custom_sort(lines):
+def custom_sort(lines: List[Any]):
     for lowest in range(len(lines) - 1):
         lowest_offset = lowest
 
@@ -17,12 +18,63 @@ def custom_sort(lines):
             lines[lowest], lines[lowest_offset] = lines[lowest_offset], lines[lowest]
 
 
-def compare(list1, list2):
+def compare2(list1: List[Any] | int, list2: List[Any] | int) -> int:
+    if type(list1) == int and type(list2) == int:
+        if list1 < list2:
+            print(1, "\n", list1, "\n", list2)
+            return -1
+        elif list1 > list2:
+            print(2, "\n", list1, "\n", list2)
+            return 1
+
+    list1_as_list = list1 if type(list1) == list else [list1]
+    list2_as_list = list2 if type(list2) == list else [list2]
+
+    for offset in range(min(len(list1_as_list), len(list2_as_list))):
+        item1: List[Any] | int = list1_as_list[offset]
+        item2: List[Any] | int = list2_as_list[offset]
+
+        if type(item1) == int and type(item2) == int:
+            if item1 < item2:
+                print(3, "\n", list1, "\n", list2)
+                return -1
+            elif item1 > item2:
+                print(4, "\n", list1, "\n", list2)
+                return 1
+        else:
+            item1_as_list = []
+            item2_as_list = []
+
+            if type(item1) == int and type(item2) == list:
+                item1_as_list = [item1]
+                item2_as_list: List[Any] = item2
+            elif type(item1) == list and type(item2) == int:
+                item1_as_list: List[Any] = item1
+                item2_as_list = [item2]
+
+            result = compare(item1_as_list, item2_as_list)
+
+            if result != 0:
+                print(5, "\n", list1, "\n", list2)
+                return result
+
+    if len(list1_as_list) < len(list2_as_list):
+        print(6, "\n", list1, "\n", list2)
+        return -1
+    elif len(list1_as_list) > len(list2_as_list):
+        print(7, "\n", list1, "\n", list2)
+        return 1
+
+    # print(8, "\n", list1, "\n", list2)
+    return 0
+
+
+def compare(list1: List[Any], list2: List[Any]) -> int:
     offset = 0
 
     for offset in range(min(len(list1), len(list2))):
-        item1 = list1[offset]
-        item2 = list2[offset]
+        item1: List[Any] | int = list1[offset]
+        item2: List[Any] | int = list2[offset]
 
         if type(item1) == int and type(item2) == int:
             if list1[offset] < list2[offset]:
@@ -35,7 +87,11 @@ def compare(list1, list2):
             elif type(item1) == list and type(item2) == int:
                 item2 = [item2]
 
-            result = compare(item1, item2)
+            # result = compare(item1, item2)
+            result = compare(
+                item1 if type(item1) == list else [item1],
+                item2 if type(item2) == list else [item2],
+            )
 
             if result != 0:
                 return result
@@ -55,7 +111,9 @@ def main(day: int, input_path: str, input_type: str):
     pair_index = 1
     index_total = 0
     list1_filled = False
-    list1, list2, filled_lines = [], [], []
+    list1: List[Any] = []
+    list2: List[Any] = []
+    filled_lines: List[Any] = []
 
     for line in lines:
         line = line.rstrip("\n")

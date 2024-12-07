@@ -1,7 +1,14 @@
 from pathlib import PurePath
+from typing import Dict, List, Tuple
 
 
-def measure_route(start_valve, rates, routes, route, time_limit):
+def measure_route(
+    start_valve: int,
+    rates: List[int],
+    routes: Dict[str, int],
+    route: List[int],
+    time_limit: int,
+) -> Tuple[bool, int]:
     time = 0
     flow = 0
     valve = start_valve
@@ -20,14 +27,14 @@ def measure_route(start_valve, rates, routes, route, time_limit):
     return True, flow
 
 
-def get_all_routes(routes, valves):
-    all_routes = dict()
+def get_all_routes(routes: List[List[int]], valves: List[str]) -> Dict[str, int]:
+    all_routes: Dict[str, int] = {}
 
     for r in routes:
         all_routes[f"{r[0]}-{r[1]}"] = 1
 
     for distance in range(1, len(valves)):
-        new_routes = dict()
+        new_routes: Dict[str, int] = {}
 
         for k, v in all_routes.items():
             start = int(k.split("-")[0])
@@ -49,8 +56,10 @@ def get_all_routes(routes, valves):
     return all_routes
 
 
-def get_useful_routes(all_routes, valves, rates):
-    useful_routes = dict()
+def get_useful_routes(
+    all_routes: Dict[str, int], valves: List[str], rates: List[int]
+) -> Dict[str, int]:
+    useful_routes: Dict[str, int] = {}
 
     for k, v in all_routes.items():
         start = int(k.split("-")[0])
@@ -66,8 +75,8 @@ def main(day: int, input_path: str, input_type: str):
     with open(f"{input_path}/{input_type}/Day{day:02}.txt", "r") as f:
         lines = f.readlines()
 
-    valves = []
-    routes = []
+    valves: List[str] = []
+    routes: List[List[int]] = []
     rates = [0] * len(lines)
 
     for line in lines:
@@ -94,15 +103,15 @@ def main(day: int, input_path: str, input_type: str):
     start_valve = valves.index("AA")
 
     # Make a list of routes and totals.
-    routes = [[[], 0]]
+    routes_and_totals: List[Tuple[List[int], int]] = [([], 0)]
     best_total = 0
     part1_minutes = 30
     max_routes = 40000
 
-    while routes:
-        next_routes = []
+    while routes_and_totals:
+        next_route_and_total: List[Tuple[List[int], int]] = []
 
-        for r in routes:
+        for r in routes_and_totals:
             for v in useful_valves:
                 if v in r[0]:
                     continue
@@ -118,28 +127,32 @@ def main(day: int, input_path: str, input_type: str):
                 if new_flow > best_total:
                     best_total = new_flow
 
-                next_routes.append([new_route, new_flow])
+                next_route_and_total.append((new_route, new_flow))
 
-        routes.clear()
+        routes_and_totals.clear()
 
-        if next_routes:
-            if len(next_routes) > max_routes:
-                sorted_nr = sorted(next_routes, key=lambda x: x[1], reverse=True)
-                routes = sorted_nr[:max_routes]
+        if next_route_and_total:
+            if len(next_route_and_total) > max_routes:
+                sorted_nr = sorted(
+                    next_route_and_total, key=lambda x: x[1], reverse=True
+                )
+                routes_and_totals = sorted_nr[:max_routes]
             else:
-                routes = next_routes
+                routes_and_totals = next_route_and_total
 
     print(f"{input_type:>6} Part 1: {best_total}")
 
     # Same again but we can select two routes, two totals
-    routes = [[[], [], 0, 0]]
+    two_routes_two_totals: List[Tuple[List[int], List[int], int, int]] = [
+        ([], [], 0, 0)
+    ]
     best_total = 0
     part2_minutes = 26
 
-    while routes:
-        next_routes = []
+    while two_routes_two_totals:
+        next_routes_and_totals: List[Tuple[List[int], List[int], int, int]] = []
 
-        for r in routes:
+        for r in two_routes_two_totals:
             for v in useful_valves:
                 if v in r[0] or v in r[1]:
                     continue
@@ -154,7 +167,7 @@ def main(day: int, input_path: str, input_type: str):
                     if new_flow + r[3] > best_total:
                         best_total = new_flow + r[3]
 
-                    next_routes.append([new_route, r[1], new_flow, r[3]])
+                    next_routes_and_totals.append((new_route, r[1], new_flow, r[3]))
 
                 new_route = [v] if not r[1] else r[1] + [v]
 
@@ -170,17 +183,19 @@ def main(day: int, input_path: str, input_type: str):
                     if new_flow + r[2] > best_total:
                         best_total = new_flow + r[2]
 
-                    next_routes.append([r[0], new_route, r[2], new_flow])
+                    next_routes_and_totals.append((r[0], new_route, r[2], new_flow))
 
-        routes.clear()
+        two_routes_two_totals.clear()
 
-        if next_routes:
+        if next_routes_and_totals:
             # If there's more than a "reasonable" number, keep the best ones.
-            if len(next_routes) > max_routes:
-                sorted_nr = sorted(next_routes, key=lambda x: x[2] + x[3], reverse=True)
-                routes = sorted_nr[:max_routes]
+            if len(next_routes_and_totals) > max_routes:
+                sorted_nr = sorted(
+                    next_routes_and_totals, key=lambda x: x[2] + x[3], reverse=True
+                )
+                two_routes_two_totals = sorted_nr[:max_routes]
             else:
-                routes = next_routes
+                two_routes_two_totals = next_routes_and_totals
 
     print(f"{input_type:>6} Part 2: {best_total}")
 

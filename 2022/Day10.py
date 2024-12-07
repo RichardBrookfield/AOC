@@ -1,7 +1,8 @@
 from pathlib import PurePath
+from typing import List
 
 
-def update_crt(crt, cycle, x):
+def update_crt(crt: List[List[str]], cycle: int, x: int):
     crt_characters = len(crt[0])
 
     crt_row_position = int(cycle / crt_characters)
@@ -19,7 +20,7 @@ def main(day: int, input_path: str, input_type: str):
     cycle_to_note, cycle_note_offset = 20, 40
     crt_rows, crt_characters = 6, 40
 
-    crt = []
+    crt: List[List[str]] = []
 
     for _ in range(crt_rows):
         crt.append(list("." * crt_characters))

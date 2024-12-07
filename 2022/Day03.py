@@ -1,7 +1,8 @@
 from pathlib import PurePath
+from typing import List
 
 
-def find_common(str1: str, str2: str, all: bool):
+def find_common(str1: str, str2: str, all: bool) -> str:
     common = ""
 
     for c in str1:
@@ -27,7 +28,7 @@ def main(day: int, input_path: str, input_type: str):
 
     total_part1 = 0
     total_part2 = 0
-    triplets = []
+    triplets: List[str] = []
 
     for line in lines:
         line = line.rstrip("\n")

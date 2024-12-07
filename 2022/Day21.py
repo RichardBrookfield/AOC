@@ -1,8 +1,9 @@
-from pathlib import PurePath
 import copy
+from pathlib import PurePath
+from typing import Dict, Optional
 
 
-def isnumber(s: str):
+def isnumber(s: Optional[str]):
     if s is None:
         return False
     elif s.isnumeric():
@@ -15,7 +16,7 @@ def isnumber(s: str):
         return False
 
 
-def process_forwards(monkeys):
+def process_forwards(monkeys: Dict[str, Dict[str, str | None]]):
     processed_something = True
 
     while processed_something:
@@ -32,7 +33,7 @@ def process_forwards(monkeys):
                     processed_something = True
 
             if not isnumber(v["Value2"]):
-                value2 = monkeys[v["Value2"]]
+                value2 = monkeys[v["Value2"] or ""]
                 if value2["Result"] is not None:
                     monkeys[k]["Value2"] = value2["Result"]
                     processed_something = True
@@ -44,9 +45,11 @@ def process_forwards(monkeys):
                 processed_something = True
 
 
-def process_backwards(monkeys, human):
+def process_backwards(
+    monkeys: Dict[str, Dict[str, str | None]], human: Dict[str, str | None]
+):
     while human["Required"] is None:
-        for k, v in monkeys.items():
+        for _, v in monkeys.items():
             if v["Result"] is not None:
                 continue
 
@@ -66,7 +69,7 @@ def process_backwards(monkeys, human):
                 elif v["Operator"] == "/":
                     result = eval(f"{v['Value1']}/{v['Required']}")
 
-                monkeys[v["Value2"]]["Required"] = str(result)
+                monkeys[v["Value2"] or ""]["Required"] = str(result)
                 v["Result"] = str(result)
 
             if (
@@ -85,7 +88,7 @@ def process_backwards(monkeys, human):
                 elif v["Operator"] == "/":
                     result = eval(f"{v['Required']}*{v['Value2']}")
 
-                monkeys[v["Value1"]]["Required"] = str(result)
+                monkeys[v["Value1"] or ""]["Required"] = str(result)
                 v["Result"] = str(result)
 
 
@@ -93,7 +96,7 @@ def main(day: int, input_path: str, input_type: str):
     with open(f"{input_path}/{input_type}/Day{day:02}.txt", "r") as f:
         lines = f.readlines()
 
-    monkeys1 = {}
+    monkeys1: Dict[str, Dict[str, str | None]] = {}
 
     for line in lines:
         line = line.rstrip("\n")
@@ -123,7 +126,7 @@ def main(day: int, input_path: str, input_type: str):
 
     process_forwards(monkeys1)
 
-    print(f"{input_type:>6} Part 1: {int(float(root['Result']))}")
+    print(f"{input_type:>6} Part 1: {int(float(root['Result'] or 0))}")
 
     for v in monkeys2.values():
         v["Required"] = None
@@ -140,17 +143,17 @@ def main(day: int, input_path: str, input_type: str):
     # Then the lone equality
     for v in [v for v in monkeys2.values() if v["Operator"] == "="]:
         if not isnumber(v["Value1"]) and isnumber(v["Value2"]):
-            monkeys2[v["Value1"]]["Required"] = v["Value2"]
+            monkeys2[v["Value1"] or ""]["Required"] = v["Value2"]
             v["Value1"] = v["Value2"]
         elif isnumber(v["Value1"]) and not isnumber(v["Value2"]):
-            monkeys2[v["Value2"]]["Required"] = v["Value1"]
+            monkeys2[v["Value2"] or ""]["Required"] = v["Value1"]
             v["Value2"] = v["Value1"]
         v["Required"] = "Satisfied"
 
     # Now work backwards from known results
     process_backwards(monkeys2, human)
 
-    print(f"{input_type:>6} Part 2: {int(float(human['Required']))}")
+    print(f"{input_type:>6} Part 2: {int(float(human['Required'] or 0))}")
 
 
 if __name__ == "__main__":

@@ -1,15 +1,16 @@
 from pathlib import PurePath
+from typing import List, Tuple
 
 
-def read_layout(lines):
-    tree_height = []
-    tree_visible = []
+def read_layout(lines: List[str]) -> Tuple[List[List[int]], List[List[bool]]]:
+    tree_height: List[List[int]] = []
+    tree_visible: List[List[bool]] = []
 
     line_length = len(lines[0].rstrip("\n"))
     all_false = [False] * line_length
 
-    for i in range(line_length):
-        tree_height.append(list())
+    for _ in range(line_length):
+        tree_height.append([])
         tree_visible.append(all_false.copy())
 
     row = 0
@@ -23,14 +24,21 @@ def read_layout(lines):
     return tree_height, tree_visible
 
 
-def mark_tree_visible(tree_height, tree_visible, row, column, highest):
+def mark_tree_visible(
+    tree_height: List[List[int]],
+    tree_visible: List[List[bool]],
+    row: int,
+    column: int,
+    highest: int,
+) -> int:
     if tree_height[row][column] > highest:
         highest = tree_height[row][column]
         tree_visible[row][column] = True
+
     return highest
 
 
-def mark_all_visible(tree_height, tree_visible):
+def mark_all_visible(tree_height: List[List[int]], tree_visible: List[List[bool]]):
     maximum = len(tree_height)
 
     for row in range(maximum):
@@ -57,8 +65,14 @@ def mark_all_visible(tree_height, tree_visible):
 
 
 def scan_tree_line(
-    tree_height, row_start, row_end, row_delta, column_start, column_end, column_delta
-):
+    tree_height: List[List[int]],
+    row_start: int,
+    row_end: int,
+    row_delta: int,
+    column_start: int,
+    column_end: int,
+    column_delta: int,
+) -> int:
     score = 0
     current_height = tree_height[row_start][column_start]
 
@@ -80,7 +94,7 @@ def scan_tree_line(
     return score
 
 
-def find_tree_score(tree_height, row, column):
+def find_tree_score(tree_height: List[List[int]], row: int, column: int) -> int:
     maximum = len(tree_height)
 
     total_score = scan_tree_line(tree_height, row, maximum - 1, 1, column, maximum, 0)
@@ -91,13 +105,13 @@ def find_tree_score(tree_height, row, column):
     return total_score
 
 
-def find_all_scores(tree_height):
+def find_all_scores(tree_height: List[List[int]]):
     maximum = len(tree_height)
 
-    scenic_scores = []
+    scenic_scores: List[List[int]] = []
 
     for row in range(maximum):
-        scenic_scores.append(list())
+        scenic_scores.append([])
 
         for column in range(maximum):
             scenic_scores[row].append(find_tree_score(tree_height, row, column))

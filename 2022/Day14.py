@@ -1,12 +1,13 @@
 from pathlib import PurePath
+from typing import List
 
 
-def read_layout(all_parts, lines):
+def read_layout(all_parts: List[List[List[int]]], lines: List[str]):
     for line in lines:
         line = line.rstrip("\n")
 
         text_parts = line.split(" -> ")
-        parts = []
+        parts: List[List[int]] = []
 
         for part in text_parts:
             x, y = part.split(",")
@@ -15,8 +16,10 @@ def read_layout(all_parts, lines):
         all_parts.append(parts)
 
 
-def add_walls(cave, all_parts, max_x, max_y):
-    for x in range(max_x):
+def add_walls(
+    cave: List[List[str]], all_parts: List[List[List[int]]], max_x: int, max_y: int
+):
+    for _ in range(max_x):
         row = ["."] * (max_y + 1)
         cave.append(row)
 
@@ -38,7 +41,7 @@ def add_walls(cave, all_parts, max_x, max_y):
                 cave[from_x][from_y] = "#"
 
 
-def add_sand(cave, max_x: int, max_y: int) -> bool:
+def add_sand(cave: List[List[str]], max_x: int, max_y: int) -> bool:
     x, y = 500, 0
 
     while cave[x][y] == ".":
@@ -64,7 +67,7 @@ def main(day: int, input_path: str, input_type: str):
     with open(f"{input_path}/{input_type}/Day{day:02}.txt", "r") as f:
         lines = f.readlines()
 
-    all_parts = []
+    all_parts: List[List[List[int]]] = []
     read_layout(all_parts, lines)
 
     all_x = [p[0] for p in [p for parts in all_parts for p in parts]]
@@ -72,7 +75,7 @@ def main(day: int, input_path: str, input_type: str):
     max_x = max(all_x) + 80
     max_y = max(all_y) + 2
 
-    cave = []
+    cave: List[List[str]] = []
     add_walls(cave, all_parts, max_x, max_y)
 
     sand_added = 0

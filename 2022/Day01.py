@@ -1,4 +1,5 @@
 from pathlib import PurePath
+from typing import List
 
 
 def main(day: int, input_path: str, input_type: str):
@@ -7,7 +8,7 @@ def main(day: int, input_path: str, input_type: str):
 
     current_total = 0
 
-    calories = list()
+    calories: List[int] = []
 
     for line in lines:
         line = line.rstrip("\n")

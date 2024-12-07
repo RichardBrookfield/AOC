@@ -1,7 +1,7 @@
 from pathlib import PurePath
 
 
-def find_marker(message: str, unique: int):
+def find_marker(message: str, unique: int) -> int:
     for offset in range(len(message) - unique + 1):
         chunk = message[offset : offset + unique]
 
@@ -14,6 +14,9 @@ def find_marker(message: str, unique: int):
 def main(day: int, input_path: str, input_type: str):
     with open(f"{input_path}/{input_type}/Day{day:02}.txt", "r") as f:
         lines = f.readlines()
+
+    offset = 0
+    message = 0
 
     for line in lines:
         line = line.rstrip("\n")

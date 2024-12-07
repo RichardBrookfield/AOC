@@ -1,12 +1,13 @@
 from pathlib import PurePath
+from typing import List
 
 
-def manhattan_distance(point0, point1) -> int:
+def manhattan_distance(point0: List[int], point1: List[int]) -> int:
     return abs(point0[0] - point1[0]) + abs(point0[1] - point1[1])
 
 
-def distinct_intervals(interval):
-    distinct = []
+def distinct_intervals(interval: List[List[int]]) -> List[List[int]]:
+    distinct: List[List[int]] = []
     next_item = interval[0]
     interval = interval[1:]
 
@@ -27,8 +28,8 @@ def distinct_intervals(interval):
     return distinct
 
 
-def combine_intervals(interval1, interval2):
-    combined = []
+def combine_intervals(interval1: List[List[int]], interval2: List[List[int]]):
+    combined: List[List[int]] = []
 
     while interval1 or interval2:
         if not interval1:
@@ -56,8 +57,8 @@ def combine_intervals(interval1, interval2):
     return distinct_intervals(combined)
 
 
-def remove_from_interval(interval, value):
-    new_interval = []
+def remove_from_interval(interval: List[List[int]], value: int) -> List[List[int]]:
+    new_interval: List[List[int]] = []
 
     while interval:
         item = interval[0]
@@ -77,7 +78,7 @@ def remove_from_interval(interval, value):
     return new_interval
 
 
-def items_in_interval(interval) -> int:
+def items_in_interval(interval: List[List[int]]) -> int:
     items = 0
 
     for r in interval:
@@ -86,7 +87,7 @@ def items_in_interval(interval) -> int:
     return items
 
 
-def items_in_subinterval(interval, start: int, end: int) -> int:
+def items_in_subinterval(interval: List[List[int]], start: int, end: int) -> int:
     items = 0
 
     for r in interval:
@@ -95,7 +96,7 @@ def items_in_subinterval(interval, start: int, end: int) -> int:
     return items
 
 
-def missing_value_in_interval(interval, start: int, end: int) -> int:
+def missing_value_in_interval(interval: List[List[int]], start: int, end: int) -> int:
     item = interval[0]
 
     for r in interval[1:]:
@@ -107,7 +108,9 @@ def missing_value_in_interval(interval, start: int, end: int) -> int:
     return -1
 
 
-def excluded_on_row(row, sensors, distances) -> set:
+def excluded_on_row(
+    row: int, sensors: List[List[int]], distances: List[int]
+) -> List[List[int]]:
     all_excluded = []
 
     for s in range(len(sensors)):
@@ -126,7 +129,10 @@ def main(day: int, input_path: str, input_type: str):
     with open(f"{input_path}/{input_type}/Day{day:02}.txt", "r") as f:
         lines = f.readlines()
 
-    sensors, beacons, nearest, distances = [], [], [], []
+    sensors: List[List[int]] = []
+    beacons: List[List[int]] = []
+    nearest: List[int] = []
+    distances: List[int] = []
 
     for line in lines:
         line = line.rstrip("\n")

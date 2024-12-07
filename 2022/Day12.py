@@ -1,9 +1,10 @@
-from pathlib import PurePath
 from math import floor
+from pathlib import PurePath
+from typing import List
 
 
 # Covert between offsets (1D) and points to record the route.
-def offset_from_point(point, columns: int):
+def offset_from_point(point: List[int], columns: int):
     return point[0] * columns + point[1]
 
 
@@ -11,13 +12,15 @@ def point_from_offset(offset: int, columns: int):
     return [floor(offset / columns), offset % columns]
 
 
-def find_route(heights, start, end_height: int, going_up: bool = True):
+def find_route(
+    heights: List[List[int]], start: List[int], end_height: int, going_up: bool = True
+):
     rows = len(heights)
     columns = len(heights[0])
     moves = [[1, 0], [0, 1], [-1, 0], [0, -1]]
 
-    routes = []
-    visited_offsets = []
+    routes: List[List[int]] = []
+    visited_offsets: List[int] = []
 
     routes.append([])
     routes[0].append(offset_from_point(start, columns))
@@ -30,7 +33,7 @@ def find_route(heights, start, end_height: int, going_up: bool = True):
                 # Number of steps is one less than the number of points
                 return len(r) - 1
 
-        new_routes = []
+        new_routes: List[List[int]] = []
 
         for route in routes:
             previous_end = route[-1]
@@ -67,7 +70,9 @@ def main(day: int, input_path: str, input_type: str):
         lines = f.readlines()
 
     rows = 0
-    start, end, heights = [], [], []
+    start: List[int] = []
+    end = []
+    heights: List[List[int]] = []
     high_point = 27
 
     for line in lines:

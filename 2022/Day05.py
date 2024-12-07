@@ -1,8 +1,9 @@
-from pathlib import PurePath
 import copy
+from pathlib import PurePath
+from typing import List
 
 
-def add_crates(stacks, line: str):
+def add_crates(stacks: List[List[str]], line: str):
     current_stack = 0
 
     while len(line) >= 3:
@@ -14,7 +15,7 @@ def add_crates(stacks, line: str):
     return stacks
 
 
-def move_crates(stacks, line: str, singles: bool):
+def move_crates(stacks: List[List[str]], line: str, singles: bool) -> List[List[str]]:
     # Parse the line, our stacks are zero-based
     moves = line.split(" ")
     crates = int(moves[1])
@@ -22,7 +23,7 @@ def move_crates(stacks, line: str, singles: bool):
 
     # Grab what needs to be copied, remove, re-add
     if singles:
-        for i in range(crates):
+        for _ in range(crates):
             stacks[to_stack] += stacks[from_stack].pop()
     else:
         stacks[to_stack] += stacks[from_stack][-crates:]
@@ -35,11 +36,11 @@ def main(day: int, input_path: str, input_type: str):
     with open(f"{input_path}/{input_type}/Day{day:02}.txt", "r") as f:
         lines = f.readlines()
 
-    stacks_part1 = []
-    stacks_part2 = []
+    stacks_part1: List[List[str]] = []
+    stacks_part2: List[List[str]] = []
 
-    for i in range(int((len(lines[0]) + 1) / 4)):
-        stacks_part1.append(list())
+    for _ in range(int((len(lines[0]) + 1) / 4)):
+        stacks_part1.append([])
 
     for line in lines:
         line = line.rstrip("\n")

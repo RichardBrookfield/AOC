@@ -1,7 +1,8 @@
 from pathlib import PurePath
+from typing import Dict, List, Set
 
 
-def adjust_tail(rope, positions, offset):
+def adjust_tail(rope: List[Dict[str, int]], positions: List[Set[str]], offset: int):
     if offset >= len(rope):
         return
 
@@ -40,8 +41,8 @@ def main(day: int, input_path: str, input_type: str, snake_size: int, suffix: st
         lines = f.readlines()
 
     coordinate = {"x": 0, "y": 0}
-    rope = []
-    positions = []
+    rope: List[Dict[str, int]] = []
+    positions: List[Set[str]] = []
 
     for i in range(snake_size):
         rope.append(coordinate.copy())
