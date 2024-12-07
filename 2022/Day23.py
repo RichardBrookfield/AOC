@@ -1,11 +1,12 @@
 from pathlib import PurePath
+from typing import List
 
 
 def main(day: int, input_path: str, input_type: str):
     with open(f"{input_path}/{input_type}/Day{day:02}.txt", "r") as f:
         lines = f.readlines()
 
-    elves = []
+    elves: List[List[int]] = []
     row = 0
 
     for line in lines:
@@ -32,7 +33,7 @@ def main(day: int, input_path: str, input_type: str):
     round = 0
 
     while True:
-        new_positions = []
+        new_positions: List[List[int]] = []
 
         for e in range(len(elves)):
             new_position = None
@@ -76,7 +77,7 @@ def main(day: int, input_path: str, input_type: str):
         if elves == new_positions:
             break
 
-        if round >= 50 and round % 10 == 0:
+        if round > 0 and round % 50 == 0:
             different = len(
                 [e for e in range(len(elves)) if new_positions[e] != elves[e]]
             )

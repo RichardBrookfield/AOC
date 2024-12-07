@@ -1,26 +1,31 @@
-from __future__ import annotations
-from pathlib import PurePath
 import copy
+from pathlib import PurePath
+from typing import Any, Dict, List, Optional
+
+# Offsets into the materials tuple.
+M_RESOURCES = 0
+M_ROBOTS = 1
+M_REQUESTED = 2
+M_TIME = 3
+M_HISTORY = 4
 
 
-# Offsets into the materials array.
-m_resources = 0
-m_robots = 1
-m_requested = 2
-m_time = 3
-m_history = 4
+def get_materials() -> Dict[int, Any]:
+    return {
+        M_RESOURCES: [0, 0, 0, 0],
+        M_ROBOTS: [1, 0, 0, 0],
+        M_REQUESTED: [0, 0, 0, 0],
+        M_TIME: 0,
+        M_HISTORY: "",
+    }
 
 
-def get_materials():
-    return [[0, 0, 0, 0], [1, 0, 0, 0], [0, 0, 0, 0], 0, ""]
-
-
-def resource_list():
+def resource_list() -> List[str]:
     return ["ore", "clay", "obsidian", "geode"]
 
 
-def load_blueprints(lines):
-    blueprints = []
+def load_blueprints(lines: List[str]) -> List[List[List[List[int]]]]:
+    blueprints: List[List[List[List[int]]]] = []
 
     for line in lines:
         line = line.rstrip("\n")
@@ -28,13 +33,13 @@ def load_blueprints(lines):
         colons = line.split(":")
 
         sentences = [r.strip(" ") for r in colons[1].split(".") if r]
-        recipes = []
+        recipes: List[List[List[int]]] = []
 
         for s in sentences:
             parts = s.split(" ")
             costs = parts[4:]
 
-            ingredients = []
+            ingredients: List[List[int]] = []
             while costs:
                 ingredients.append([resource_list().index(costs[1]), int(costs[0])])
                 if len(costs) > 3:
@@ -50,9 +55,9 @@ def load_blueprints(lines):
 
 
 def make_robot(
-    materials,
-    blueprint,
-    most: list[int],
+    materials: Dict[int, Any],
+    blueprint: List[List[List[int]]],
+    most: List[int],
     time_limit: int,
     robot_type: int,
 ) -> bool:
@@ -60,70 +65,70 @@ def make_robot(
 
     # You only have one "factory"
     for resource in recipe:
-        if materials[m_resources][resource[0]] < resource[1]:
+        if materials[M_RESOURCES][resource[0]] < resource[1]:
             return False
 
-    time_left = time_limit - materials[m_time]
+    time_left = time_limit - materials[M_TIME]
 
     # Don't create another ore/clay robot if you can't use what you have/will have.
     for r in range(2):
         if (
             robot_type == r
-            and materials[m_resources][r] + time_left * materials[m_robots][r]
+            and materials[M_RESOURCES][r] + time_left * materials[M_ROBOTS][r]
             > most[r] * time_left
         ):
             return False
 
-    materials[m_requested][robot_type] += 1
+    materials[M_REQUESTED][robot_type] += 1
 
     for resource in recipe:
-        materials[m_resources][resource[0]] -= resource[1]
+        materials[M_RESOURCES][resource[0]] -= resource[1]
 
     return True
 
 
 def advance_state(
-    blueprint,
-    materials,
+    blueprint: List[List[List[int]]],
+    materials: Dict[int, Any],
     most: list[int],
     time_limit: int,
-    desired_robot: str,
+    desired_robot: Optional[str],
 ):
     # Get resources from existing robots
     for r in range(len(resource_list())):
-        materials[m_resources][r] += materials[m_robots][r]
+        materials[M_RESOURCES][r] += materials[M_ROBOTS][r]
 
     # Collect robots made in the previous round
     for r in range(len(resource_list())):
-        materials[m_robots][r] += materials[m_requested][r]
-        materials[m_requested][r] = 0
+        materials[M_ROBOTS][r] += materials[M_REQUESTED][r]
+        materials[M_REQUESTED][r] = 0
 
-    materials[m_time] += 1
+    materials[M_TIME] += 1
 
     # No point in making a robot in the last round (allowing time for it to be made)
-    if materials[m_time] == time_limit - 1:
+    if materials[M_TIME] == time_limit - 1:
         return desired_robot
 
     # No point in making a non-geode robot in the penultimate round
-    if desired_robot and materials[m_time] == time_limit - 2 and int(desired_robot) < 3:
+    if desired_robot and materials[M_TIME] == time_limit - 2 and int(desired_robot) < 3:
         return desired_robot
 
     # Make robot based on resources
     if desired_robot and make_robot(
         materials, blueprint, most, time_limit, int(desired_robot)
     ):
-        materials[m_history] += desired_robot
+        materials[M_HISTORY] += desired_robot
         desired_robot = ""
 
     return desired_robot
 
 
 def advance_blueprint(
-    blueprint,
-    materials,
+    blueprint: List[List[List[int]]],
+    materials: Dict[int, Any],
     most: list[int],
     time_limit: int,
-    desired_robot: str,
+    desired_robot: Optional[str],
     to_end: bool = False,
 ):
     while desired_robot or to_end:
@@ -131,25 +136,33 @@ def advance_blueprint(
             blueprint, materials, most, time_limit, desired_robot
         )
 
-        if materials[m_time] >= time_limit:
+        if materials[M_TIME] >= time_limit:
             return True if to_end else False
 
     return True
 
 
-def show_best(blueprint_offset, best_geode, copy_materials):
+def show_best(
+    blueprint_offset: int,
+    best_geode: int,
+    copy_materials: Dict[int, Any],
+):
     print(f"BP {blueprint_offset+1:>2}  Best {best_geode:>2}  Debug {copy_materials}")
 
 
-def test_blueprint(blueprints, blueprint_offset: int, time_limit):
+def test_blueprint(
+    blueprints: List[List[List[List[int]]]],
+    blueprint_offset: int,
+    time_limit: int,
+) -> int:
     robots = ["0", "1", "2", "3"]
     best_geode = 0
-    working = []
+    working: List[Dict[int, Any]] = []
     working.append(get_materials())
     blueprint = blueprints[blueprint_offset]
 
     # What's the most expensive non-ore recipe requiring ore?  Ditto for clay.
-    most = []
+    most: List[int] = []
     most.append(
         max(max([i[1] for i in r if i[0] == 0], default=0) for r in blueprint[1:])
     )
@@ -164,7 +177,7 @@ def test_blueprint(blueprints, blueprint_offset: int, time_limit):
     array_split_point = 70000
 
     while True:
-        next_working = []
+        next_working: List[Dict[int, Any]] = []
 
         # If the list gets too big, only process the bottom part to keep it under control
         # and pass through the top part through "as is". The bottom solutions are longer and
@@ -179,12 +192,12 @@ def test_blueprint(blueprints, blueprint_offset: int, time_limit):
             # Is it worth continuing, if we got the maximum geodes in the remaining time?
             # Add together: geodes, geode robots * time, best case future (triangular numbers).
             # For future you can take one off the time, as we need to wait for robots to be made.
-            time_left = time_limit - w[m_time]
+            time_left = time_limit - w[M_TIME]
 
             if (
                 time_left < 10
-                and w[m_resources][3]
-                + time_left * w[m_robots][3]
+                and w[M_RESOURCES][3]
+                + time_left * w[M_ROBOTS][3]
                 + triangles[time_left - 1]
                 < best_geode
             ):
@@ -194,19 +207,19 @@ def test_blueprint(blueprints, blueprint_offset: int, time_limit):
                 copy_materials = copy.deepcopy(w)
                 if (
                     advance_blueprint(blueprint, copy_materials, most, time_limit, r)
-                    and copy_materials[m_time] < time_limit
+                    and copy_materials[M_TIME] < time_limit
                 ):
                     next_working.append(copy_materials)
                 if (
-                    copy_materials[m_resources][3] > best_geode
-                    and copy_materials[m_time] == time_limit
+                    copy_materials[M_RESOURCES][3] > best_geode
+                    and copy_materials[M_TIME] == time_limit
                 ):
-                    best_geode = copy_materials[m_resources][3]
+                    best_geode = copy_materials[M_RESOURCES][3]
                     show_best(blueprint_offset, best_geode, copy_materials)
 
             # After adding to the manufacturing list, try extending all the way to end.
             # But only if there's at least one geode robot.
-            if w[m_robots][3] > 0:
+            if w[M_ROBOTS][3] > 0:
                 copy_materials = copy.deepcopy(w)
 
                 # Full advance all the way to the end
@@ -214,9 +227,9 @@ def test_blueprint(blueprints, blueprint_offset: int, time_limit):
                     advance_blueprint(
                         blueprint, copy_materials, most, time_limit, None, True
                     )
-                    and copy_materials[m_resources][3] > best_geode
+                    and copy_materials[M_RESOURCES][3] > best_geode
                 ):
-                    best_geode = copy_materials[m_resources][3]
+                    best_geode = copy_materials[M_RESOURCES][3]
                     show_best(blueprint_offset, best_geode, copy_materials)
 
         if not next_working:
@@ -234,6 +247,7 @@ def main(day: int, input_path: str, input_type: str):
     blueprints = load_blueprints(lines)
 
     for part in [1, 2]:
+        score = 0
         total_score = 0 if part == 1 else 1
         time_limit = 24 if part == 1 else 32
 
