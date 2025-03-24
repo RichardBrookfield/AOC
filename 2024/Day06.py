@@ -105,9 +105,7 @@ def main(day: int, input_path: str, input_type: str):
 
     looped_routes = 0
 
-    for new_block in [
-        new_block for new_block in occupied if new_block != (guard[0], guard[1])
-    ]:
+    for new_block in [new_block for new_block in occupied if new_block != guard]:
         if move_guard_in_loop(rows, columns, blocks | {new_block}, guard):
             looped_routes += 1
 
