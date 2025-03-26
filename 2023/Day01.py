@@ -1,6 +1,5 @@
 import re
 from pathlib import PurePath
-from typing import Tuple
 
 
 def extract_values(line: str) -> int:

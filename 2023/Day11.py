@@ -25,7 +25,7 @@ def find_galaxy_distances(lines: List[str], expansion_factor: int) -> int:
         if column not in [galaxy[1] for galaxy in galaxies]
     ]
 
-    galaxies = [
+    galaxies: List[List[int]] = [
         [
             galaxy[0],
             galaxy[1]

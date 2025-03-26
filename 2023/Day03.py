@@ -1,4 +1,5 @@
 from pathlib import PurePath
+from typing import Dict, List, Tuple
 
 
 def main(day: int, input_path: str, input_type: str):
@@ -6,8 +7,8 @@ def main(day: int, input_path: str, input_type: str):
         lines = f.readlines()
 
     total = 0
-    symbol_coverage = []
-    star_coverage = {}
+    symbol_coverage: List[List[int]] = []
+    star_coverage: Dict[Tuple[int, int], int] = {}
     star_ordinal = 0
 
     for line_number in range(len(lines)):
@@ -32,7 +33,7 @@ def main(day: int, input_path: str, input_type: str):
 
                 star_ordinal += 1
 
-    star_results = []
+    star_results: List[List[int]] = []
 
     for _ in range(star_ordinal):
         star_results.append([0, 1])
@@ -51,7 +52,6 @@ def main(day: int, input_path: str, input_type: str):
 
                 part_number = int(line[i : j + 1])
                 found_symbol = False
-                found_star = False
                 star_ordinal = None
 
                 for y in range(max(i, 0), min(j + 1, len(line))):
@@ -60,12 +60,11 @@ def main(day: int, input_path: str, input_type: str):
 
                     if (line_number, y) in star_coverage:
                         star_ordinal = star_coverage[(line_number, y)]
-                        found_star = True
 
                 if found_symbol:
                     total += part_number
 
-                if found_star:
+                if star_ordinal is not None:
                     star_results[star_ordinal][0] += 1
                     star_results[star_ordinal][1] *= part_number
 

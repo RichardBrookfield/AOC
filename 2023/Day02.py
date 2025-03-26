@@ -22,7 +22,7 @@ def validate_selections(selections: str) -> Tuple[bool, int]:
                 "red": 12,
                 "green": 13,
                 "blue": 14,
-            }.get(colour)
+            }.get(colour, 0)
 
             if number > maximum:
                 possible = False

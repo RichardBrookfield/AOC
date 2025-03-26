@@ -3,7 +3,7 @@ from typing import List
 
 
 def best_single_seed(seeds: List[int], lines: List[str]) -> int:
-    new_seeds = []
+    new_seeds: List[int] = []
 
     for line in lines[1:]:
         line = line.strip("\n")
@@ -19,7 +19,7 @@ def best_single_seed(seeds: List[int], lines: List[str]) -> int:
             new_base = mapping[0]
             base = mapping[1]
             top = base + mapping[2]
-            to_be_removed = []
+            to_be_removed: List[int] = []
 
             for seed in seeds:
                 if base <= seed < top:
@@ -35,8 +35,7 @@ def best_single_seed(seeds: List[int], lines: List[str]) -> int:
 
 
 def best_range_seed(seeds: List[List[int]], lines: List[str]) -> int:
-    new_seeds = []
-    print("Start:", seeds, "/ Total:", sum([s[1] - s[0] + 1 for s in seeds]))
+    new_seeds: List[List[int]] = []
 
     for line in lines[1:]:
         line = line.strip("\n")
@@ -57,7 +56,7 @@ def best_range_seed(seeds: List[List[int]], lines: List[str]) -> int:
             while work_done:
                 work_done = False
                 to_be_removed = None
-                to_be_added = []
+                to_be_added: List[List[int]] = []
 
                 for seed in seeds:
                     # All below or all above
@@ -117,7 +116,7 @@ def main(day: int, input_path: str, input_type: str):
 
     print(f"{input_type:>6} Part 1: {best_single_seed(seeds1, lines)}")
 
-    seeds2 = []
+    seeds2: List[List[int]] = []
 
     for i in range(0, len(seeds), 2):
         seeds2.append([seeds[i], seeds[i] + seeds[i + 1] - 1])

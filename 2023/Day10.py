@@ -56,7 +56,7 @@ def main(day: int, input_path: str, input_type: str):
     with open(f"{input_path}/{input_type}/Day{day:02}.txt", "r") as f:
         lines = f.readlines()
 
-    grid = []
+    grid: List[List[str]] = []
 
     for line in lines:
         line = line.strip("\n")
@@ -82,7 +82,7 @@ def main(day: int, input_path: str, input_type: str):
     else:
         raise Exception("No convenient pipe")
 
-    enclosed = []
+    enclosed: List[List[int]] = []
 
     for _ in range(rows):
         enclosed.append([0] * columns)
@@ -120,7 +120,7 @@ def main(day: int, input_path: str, input_type: str):
     offsets = [[1, 0], [0, 1], [-1, 0], [0, -1]]
 
     while points:
-        new_points = []
+        new_points: List[List[int]] = []
 
         for point in points:
             row = point[0]

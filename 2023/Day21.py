@@ -1,11 +1,12 @@
 from pathlib import PurePath
+from typing import List
 
 
 def main(day: int, input_path: str, input_type: str):
     with open(f"{input_path}/{input_type}/Day{day:02}.txt", "r") as f:
         lines = f.readlines()
 
-    grid = []
+    grid: List[List[str]] = []
 
     for line in lines:
         line = line.strip("\n")
@@ -24,13 +25,13 @@ def main(day: int, input_path: str, input_type: str):
         ][0]
     )
 
-    locations = []
+    locations: List[List[int]] = []
     locations.append(start)
     offsets = [[1, 0], [0, 1], [-1, 0], [0, -1]]
     steps = 0
 
     while steps < 6 and input_type == "Test" or steps < 64 and input_type == "Puzzle":
-        new_locations = []
+        new_locations: List[List[int]] = []
 
         for point in locations:
             row = point[0]

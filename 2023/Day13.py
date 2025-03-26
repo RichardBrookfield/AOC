@@ -40,7 +40,7 @@ def main(day: int, input_path: str, input_type: str):
     with open(f"{input_path}/{input_type}/Day{day:02}.txt", "r") as f:
         lines = f.readlines()
 
-    pattern = []
+    pattern: List[str] = []
     total = 0
 
     for line in lines:

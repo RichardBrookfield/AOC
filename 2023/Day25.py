@@ -5,7 +5,7 @@ from typing import List
 def count_networks(
     total_nodes: int,
     input_connections: List[List[int]],
-    ignored_connections: [List[List[int]]] = [],
+    ignored_connections: List[List[int]] = [],
 ) -> int:
     connections = input_connections.copy()
     nodes = [connections[0][0]]
@@ -15,7 +15,7 @@ def count_networks(
     while nodes_added:
         # print("Conn len:", len(connections))
         nodes_added = False
-        to_delete = []
+        to_delete: List[List[int]] = []
 
         for connection in [
             connection
@@ -42,8 +42,8 @@ def main(day: int, input_path: str, input_type: str):
     with open(f"{input_path}/{input_type}/Day{day:02}.txt", "r") as f:
         lines = f.readlines()
 
-    nodes = []
-    connections = []
+    nodes: List[str] = []
+    connections: List[List[int]] = []
 
     for line in lines:
         line = line.strip("\n")
@@ -63,7 +63,7 @@ def main(day: int, input_path: str, input_type: str):
     # print(nodes)
     # print(connections)
 
-    fixed_connections = [[6, 8], [9, 12], [0, 3]]
+    # fixed_connections: List[List[int]] = [[6, 8], [9, 12], [0, 3]]
 
     # print(count_networks(len(nodes), connections))
     # print(count_networks(len(nodes), connections, fixed_connections))
@@ -73,7 +73,11 @@ def main(day: int, input_path: str, input_type: str):
     for i in range(len(connections)):
         for j in [j for j in range(len(connections)) if j > i]:
             for k in [k for k in range(len(connections)) if k > j]:
-                ignored_connections = [connections[i], connections[j], connections[k]]
+                ignored_connections: List[List[int]] = [
+                    connections[i],
+                    connections[j],
+                    connections[k],
+                ]
                 networks = count_networks(len(nodes), connections, ignored_connections)
 
                 if networks != 1:

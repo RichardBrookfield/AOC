@@ -1,4 +1,5 @@
 from pathlib import PurePath
+from typing import Dict, List, Tuple
 
 
 def hash(message: str) -> int:
@@ -22,7 +23,7 @@ def main(day: int, input_path: str, input_type: str):
 
     print(f"{input_type:>6} Part 1: {total}")
 
-    boxes = {}
+    boxes: Dict[int, List[Tuple[str, int]]] = {}
 
     for instruction in instructions:
         label = ""
@@ -32,10 +33,12 @@ def main(day: int, input_path: str, input_type: str):
             instruction = instruction[1:]
 
         symbol = instruction[0]
-        focal_length = int(instruction[1:]) if symbol == "=" else None
-        hash_value = hash(label)
+        focal_length = int(instruction[1:]) if symbol == "=" else 0
+        hash_value: int = hash(label)
 
-        current_lenses = boxes[hash_value] if hash_value in boxes else []
+        current_lenses: List[Tuple[str, int]] = (
+            boxes[hash_value] if hash_value in boxes else []
+        )
 
         if symbol == "-":
             for i in range(len(current_lenses)):
@@ -47,12 +50,12 @@ def main(day: int, input_path: str, input_type: str):
 
             for i in range(len(current_lenses)):
                 if current_lenses[i][0] == label:
-                    current_lenses[i][1] = focal_length
+                    current_lenses[i] = (label, focal_length)
                     added = True
                     break
 
             if not added:
-                current_lenses.append([label, focal_length])
+                current_lenses.append((label, focal_length))
 
         boxes[hash_value] = current_lenses
 

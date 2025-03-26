@@ -1,15 +1,16 @@
 from pathlib import PurePath
-from typing import List
+from typing import List, Tuple
 
 
 def card_strength(card: str, part: int) -> int:
     return "AKQJT98765432".find(card) if part == 1 else "AKQT98765432J".find(card)
 
 
-def hand_strength(hand: str, part: int) -> int:
+def hand_strength(hand: str, part: int) -> str:
     hand_copy = hand
 
-    repeats = []
+    repeats: List[int] = []
+    jokers = 0
 
     if part == 2:
         starting_length = len(hand_copy)
@@ -50,20 +51,17 @@ def hand_strength(hand: str, part: int) -> int:
 
 
 def evaluate_hands(lines: List[str], part: int) -> int:
-    hands = []
+    hands: List[Tuple[str, int, str]] = []
 
     for line in lines:
         line = line.strip("\n")
 
         parts = line.split(" ")
-        hands.append([parts[0], int(parts[1]), hand_strength(parts[0], part)])
+        hands.append((parts[0], int(parts[1]), hand_strength(parts[0], part)))
 
     strengths = sorted([h[2] for h in hands], reverse=True)
 
-    for h in hands:
-        h.append(strengths.index(h[2]) + 1)
-
-    return sum([h[1] * h[3] for h in hands])
+    return sum([h[1] * (strengths.index(h[2]) + 1) for h in hands])
 
 
 def main(day: int, input_path: str, input_type: str):

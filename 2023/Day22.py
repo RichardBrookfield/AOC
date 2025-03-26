@@ -1,9 +1,13 @@
 from pathlib import PurePath
+from typing import List
 
 
 def main(day: int, input_path: str, input_type: str):
     with open(f"{input_path}/{input_type}/Day{day:02}.txt", "r") as f:
-        lines = f.readlines()
+        lines: List[str] = f.readlines()
+
+    for line in lines:
+        print(line)
 
     print(f"{input_type:>6} Part 1: ")
     print(f"{input_type:>6} Part 2: ")

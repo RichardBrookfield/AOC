@@ -3,7 +3,7 @@ from typing import List
 
 
 def find_next_number(numbers: List[int], include_number: bool = True) -> int:
-    differences = []
+    differences: List[int] = []
 
     for i in range(len(numbers) - 1):
         differences.append(numbers[i + 1] - numbers[i])
@@ -17,7 +17,7 @@ def find_next_number(numbers: List[int], include_number: bool = True) -> int:
 
 
 def find_previous_number(numbers: List[int], include_number: bool = True) -> int:
-    differences = []
+    differences: List[int] = []
 
     for i in range(len(numbers) - 1):
         differences.append(numbers[i + 1] - numbers[i])

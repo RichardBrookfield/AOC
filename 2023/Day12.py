@@ -1,7 +1,7 @@
 from pathlib import PurePath
-from typing import List
+from typing import Dict, List
 
-cached_results = {}
+cached_results: Dict[str, int] = {}
 
 
 def find_length(pattern: str, lengths: List[int], length_offset: int) -> int:

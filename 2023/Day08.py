@@ -1,9 +1,10 @@
 from functools import reduce
 from math import lcm
 from pathlib import PurePath
+from typing import Dict, List
 
 
-def follow_path(paths: dict, directions: str) -> int:
+def follow_path(paths: Dict[str, List[str]], directions: str) -> int:
     steps = 0
     offset = 0
     location = "AAA"
@@ -16,16 +17,16 @@ def follow_path(paths: dict, directions: str) -> int:
     return steps
 
 
-def follow_path_array(paths: dict, directions: str) -> int:
+def follow_path_array(paths: Dict[str, List[str]], directions: str) -> int:
     locations = [k for k in paths.keys() if k[-1] == "A"]
-    step_total = []
-    step_offset = []
+    step_total: List[int] = []
+    step_offset: List[int] = []
 
     for location in locations:
         steps = 0
         offset = 0
         start = location
-        end_count = []
+        end_count: List[int] = []
 
         while True:
             location = paths[location][0 if directions[offset] == "L" else 1]
@@ -57,8 +58,8 @@ def main(day: int, input_path: str, input_type: str, suffix: str = ""):
     with open(f"{input_path}/{input_type}/Day{day:02}{suffix}.txt", "r") as f:
         lines = f.readlines()
 
-    directions = None
-    paths = {}
+    directions: str = ""
+    paths: Dict[str, List[str]] = {}
 
     for line in lines:
         line = line.strip("\n")

@@ -2,7 +2,7 @@ from pathlib import PurePath
 from typing import List
 
 
-def stone_delta(stone: List[List[int]], delta: float) -> List[float]:
+def stone_delta(stone: List[List[float]], delta: float) -> List[float]:
     return [stone[0][i] + stone[1][i] * delta for i in range(3)]
 
 
@@ -14,8 +14,8 @@ def stone_distance_xy(
 
 
 def collision(
-    stone0: List[List[int]],
-    stone1: List[List[int]],
+    stone0: List[List[float]],
+    stone1: List[List[float]],
     target: List[int],
 ) -> bool:
     xy_distance = stone_distance_xy(stone0[0], stone1[0])
@@ -49,14 +49,14 @@ def main(day: int, input_path: str, input_type: str):
     with open(f"{input_path}/{input_type}/Day{day:02}.txt", "r") as f:
         lines = f.readlines()
 
-    stones = []
+    stones: List[List[List[float]]] = []
 
     for line in lines:
         line = line.strip("\n")
 
         parts = line.split("@")
-        positions = [int(p) for p in parts[0].strip().split(",")]
-        velocities = [int(p) for p in parts[1].strip().split(",")]
+        positions: List[float] = [float(p) for p in parts[0].strip().split(",")]
+        velocities: List[float] = [float(p) for p in parts[1].strip().split(",")]
 
         stones.append([positions, velocities])
 

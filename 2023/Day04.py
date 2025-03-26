@@ -3,7 +3,7 @@ from typing import List
 
 
 def numbers_from_spaced_list(numbers: str) -> List[int]:
-    return [n for n in numbers.strip().split(" ") if n]
+    return [int(n) for n in numbers.strip().split(" ") if n]
 
 
 def main(day: int, input_path: str, input_type: str):
@@ -11,7 +11,7 @@ def main(day: int, input_path: str, input_type: str):
         lines = f.readlines()
 
     total_score = 0
-    winners_per_card = []
+    winners_per_card: List[int] = []
 
     for line in lines:
         line = line.strip("\n")

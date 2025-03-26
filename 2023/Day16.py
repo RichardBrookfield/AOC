@@ -1,44 +1,46 @@
 from pathlib import PurePath
-from typing import List
+from typing import Dict, List
 
 
-def inside(beam: dict, rows: int, columns: int) -> bool:
-    return 0 <= beam["x"] < columns and 0 <= beam["y"] < rows
+def inside(beam: Dict[str, int | str], rows: int, columns: int) -> bool:
+    return 0 <= int(beam["x"]) < columns and 0 <= int(beam["y"]) < rows
 
 
-def new_beam(x: int, y: int, d: str) -> dict:
+def new_beam(x: int, y: int, d: str) -> Dict[str, int | str]:
     return {"x": x, "y": y, "d": d}
 
 
-def manipulate(beam: dict, hardware: List[List[str]]) -> List[dict]:
-    item = hardware[beam["y"]][beam["x"]]
+def manipulate(
+    beam: Dict[str, int | str], hardware: List[List[str]]
+) -> List[Dict[str, int | str]]:
+    item = hardware[int(beam["y"])][int(beam["x"])]
 
     if item == ".":
         return [beam]
     elif item == "|":
         return (
             [beam]
-            if beam["d"] in "ud"
+            if str(beam["d"]) in "ud"
             else [
-                new_beam(beam["x"], beam["y"], "u"),
-                new_beam(beam["x"], beam["y"], "d"),
+                new_beam(int(beam["x"]), int(beam["y"]), "u"),
+                new_beam(int(beam["x"]), int(beam["y"]), "d"),
             ]
         )
     elif item == "-":
         return (
             [beam]
-            if beam["d"] in "lr"
+            if str(beam["d"]) in "lr"
             else [
-                new_beam(beam["x"], beam["y"], "l"),
-                new_beam(beam["x"], beam["y"], "r"),
+                new_beam(int(beam["x"]), int(beam["y"]), "l"),
+                new_beam(int(beam["x"]), int(beam["y"]), "r"),
             ]
         )
     elif item == "/":
-        new_direction = {"r": "u", "d": "l", "l": "d", "u": "r"}[beam["d"]]
-        return [new_beam(beam["x"], beam["y"], new_direction)]
+        new_direction = {"r": "u", "d": "l", "l": "d", "u": "r"}[str(beam["d"])]
+        return [new_beam(int(beam["x"]), int(beam["y"]), new_direction)]
     elif item == "\\":
-        new_direction = {"r": "d", "d": "r", "l": "u", "u": "l"}[beam["d"]]
-        return [new_beam(beam["x"], beam["y"], new_direction)]
+        new_direction = {"r": "d", "d": "r", "l": "u", "u": "l"}[str(beam["d"])]
+        return [new_beam(int(beam["x"]), int(beam["y"]), new_direction)]
     else:
         print("Unknown hardware")
 
@@ -46,24 +48,27 @@ def manipulate(beam: dict, hardware: List[List[str]]) -> List[dict]:
 
 
 def count_energised(
-    initial_beam: dict, rows: int, columns: int, hardware: List[List[str]]
+    initial_beam: Dict[str, int | str],
+    rows: int,
+    columns: int,
+    hardware: List[List[str]],
 ) -> int:
-    beams = []
-    processed_beams = []
+    beams: List[Dict[str, int | str]] = []
+    processed_beams: List[Dict[str, int | str]] = []
     beams.extend([initial_beam])
 
     while beams:
-        new_beams = []
+        new_beams: List[Dict[str, int | str]] = []
 
         for beam in beams:
             if beam["d"] == "r":
-                beam["x"] += 1
+                beam["x"] = int(beam["x"]) + 1
             elif beam["d"] == "l":
-                beam["x"] -= 1
+                beam["x"] = int(beam["x"]) - 1
             elif beam["d"] == "u":
-                beam["y"] -= 1
+                beam["y"] = int(beam["y"]) - 1
             elif beam["d"] == "d":
-                beam["y"] += 1
+                beam["y"] = int(beam["y"]) + 1
 
             if not inside(beam, rows, columns) or beam in processed_beams:
                 continue
@@ -81,7 +86,7 @@ def main(day: int, input_path: str, input_type: str):
     with open(f"{input_path}/{input_type}/Day{day:02}.txt", "r") as f:
         lines = f.readlines()
 
-    hardware = []
+    hardware: List[List[str]] = []
 
     for line in lines:
         hardware.append(list(line.strip("\n")))
@@ -103,7 +108,7 @@ def main(day: int, input_path: str, input_type: str):
         best_energised = max(best_energised, energised_l, energised_r)
 
         if row and row % 10 == 0:
-            print(f"Row: {row}/{rows}")
+            print(f"Row: {row:>3}/{rows}")
 
     for column in range(columns):
         energised_d = count_energised(
@@ -116,7 +121,7 @@ def main(day: int, input_path: str, input_type: str):
         best_energised = max(best_energised, energised_d, energised_u)
 
         if column and column % 10 == 0:
-            print(f"Column: {column}/{columns}")
+            print(f"Column: {column:>3}/{columns}")
 
     print(f"{input_type:>6} Part 2: {best_energised}")
 

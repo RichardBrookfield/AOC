@@ -1,13 +1,14 @@
 from pathlib import PurePath
+from typing import List, Tuple
 
 
 def main(day: int, input_path: str, input_type: str):
     with open(f"{input_path}/{input_type}/Day{day:02}.txt", "r") as f:
         lines = f.readlines()
 
-    points = []
+    points: List[Tuple[int, int]] = []
     position = [0, 0]
-    points.append(position.copy())
+    points.append((position[0], position[1]))
 
     for line in lines:
         line = line.strip("\n")
@@ -28,11 +29,11 @@ def main(day: int, input_path: str, input_type: str):
             else:
                 print(f"Unexpected direction: {direction}")
 
-            if position in points:
+            if (position[0], position[1]) in points:
                 if position != [0, 0]:
                     print(f"Repeated position not at origin: {position}")
             else:
-                points.append(position.copy())
+                points.append((position[0], position[1]))
 
     # print(points)
 
@@ -41,7 +42,7 @@ def main(day: int, input_path: str, input_type: str):
     min_y = min([p[1] for p in points])
     max_y = max([p[1] for p in points])
 
-    grid = []
+    grid: List[List[int]] = []
     columns = max_x - min_x + 1
     rows = max_y - min_y + 1
 
@@ -57,12 +58,12 @@ def main(day: int, input_path: str, input_type: str):
     while grid[1][first_edge] == 1:
         first_edge += 1
 
-    within = []
+    within: List[List[int]] = []
     offsets = [[1, 0], [0, 1], [-1, 0], [0, -1]]
     within.append([1, first_edge])
 
     while within:
-        new_within = []
+        new_within: List[List[int]] = []
 
         for point in within:
             row = point[0]

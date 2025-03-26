@@ -2,7 +2,7 @@ from pathlib import PurePath
 from typing import List
 
 
-def tilt_north(pattern: List[List[int]]) -> None:
+def tilt_north(pattern: List[List[str]]) -> None:
     for x in range(len(pattern[0])):
         movement = True
 
@@ -15,7 +15,7 @@ def tilt_north(pattern: List[List[int]]) -> None:
                     movement = True
 
 
-def tilt_west(pattern: List[List[int]]) -> None:
+def tilt_west(pattern: List[List[str]]) -> None:
     for y in range(len(pattern)):
         movement = True
 
@@ -28,7 +28,7 @@ def tilt_west(pattern: List[List[int]]) -> None:
                     movement = True
 
 
-def tilt_south(pattern: List[List[int]]) -> None:
+def tilt_south(pattern: List[List[str]]) -> None:
     for x in range(len(pattern[0])):
         movement = True
 
@@ -41,7 +41,7 @@ def tilt_south(pattern: List[List[int]]) -> None:
                     movement = True
 
 
-def tilt_east(pattern: List[List[int]]) -> None:
+def tilt_east(pattern: List[List[str]]) -> None:
     for y in range(len(pattern)):
         movement = True
 
@@ -54,14 +54,14 @@ def tilt_east(pattern: List[List[int]]) -> None:
                     movement = True
 
 
-def tilt_cycle(pattern: List[List[int]]) -> None:
+def tilt_cycle(pattern: List[List[str]]) -> None:
     tilt_north(pattern)
     tilt_west(pattern)
     tilt_south(pattern)
     tilt_east(pattern)
 
 
-def calculate_load(pattern: List[List[int]]) -> int:
+def calculate_load(pattern: List[List[str]]) -> int:
     load = 0
 
     for y in range(len(pattern)):
@@ -76,8 +76,8 @@ def main(day: int, input_path: str, input_type: str):
     with open(f"{input_path}/{input_type}/Day{day:02}.txt", "r") as f:
         lines = f.readlines()
 
-    pattern = []
-    loads = []
+    pattern: List[List[str]] = []
+    loads: List[int] = []
 
     for line in lines:
         line = line.strip("\n")
@@ -98,12 +98,9 @@ def main(day: int, input_path: str, input_type: str):
     half_range = int(full_range / 2)
     quarter_range = int(full_range / 4)
 
-    for cycle in range(full_range):
+    for _ in range(full_range):
         tilt_cycle(pattern)
         loads.append(calculate_load(pattern))
-
-        if input_type == "Puzzle" and cycle and cycle % 40 == 0:
-            print(f"Cycle {cycle:>3}")
 
     pattern_found = False
     pattern_offset = 1

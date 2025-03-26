@@ -1,13 +1,13 @@
 from pathlib import PurePath
-from typing import List
+from typing import Dict, List
 
 
-def process_part(part: List[dict], rule: str, rules: dict) -> str:
+def process_part(part: Dict[str, int], rule: str, rules: Dict[str, List[str]]) -> str:
     instructions = rules[rule]
-    x = part["x"]
-    m = part["m"]
-    a = part["a"]
-    s = part["s"]
+    # x = part["x"]
+    # m = part["m"]
+    # a = part["a"]
+    # s = part["s"]
 
     for instruction in instructions:
         if ":" in instruction:
@@ -17,13 +17,15 @@ def process_part(part: List[dict], rule: str, rules: dict) -> str:
         else:
             return instruction
 
+    return ""
+
 
 def main(day: int, input_path: str, input_type: str):
     with open(f"{input_path}/{input_type}/Day{day:02}.txt", "r") as f:
         lines = f.readlines()
 
-    rules = {}
-    parts = []
+    rules: Dict[str, List[str]] = {}
+    parts: List[Dict[str, int]] = []
     xmas = "xmas"
 
     for line in lines:
@@ -34,7 +36,7 @@ def main(day: int, input_path: str, input_type: str):
 
         if line.startswith("{"):
             values = line[1:-1].split(",")
-            part = {}
+            part: Dict[str, int] = {}
             for i in range(4):
                 part[xmas[i]] = int(values[i].split("=")[1])
             parts.append(part)
