@@ -1,5 +1,5 @@
 from pathlib import PurePath
-from typing import List
+from typing import List, Tuple
 
 
 def find_longest_hike(
@@ -7,20 +7,20 @@ def find_longest_hike(
     slippery: bool,
     show_progress: bool = False,
 ) -> int:
-    paths = []
-    complete_paths = []
-    start = [0, 1]
+    paths: List[Tuple[str, Tuple[int, int]]] = []
+    complete_paths: List[str] = []
+    start: Tuple[int, int] = (0, 1)
     rows = len(grid)
     columns = len(grid[0])
-    end = [rows - 1, columns - 2]
+    end: Tuple[int, int] = (rows - 1, columns - 2)
     offsets = [[0, 1], [1, 0], [0, -1], [-1, 0]]
 
-    paths.append([":0,1:", start])
+    paths.append((":0,1:", start))
     paths_updated = True
 
     while paths_updated:
         paths_updated = False
-        new_paths = []
+        new_paths: List[Tuple[str, Tuple[int, int]]] = []
 
         for path in paths:
             route = path[0]
@@ -29,7 +29,7 @@ def find_longest_hike(
             for offset in offsets:
                 new_row = position[0] + offset[0]
                 new_column = position[1] + offset[1]
-                new_position = [new_row, new_column]
+                new_position = (new_row, new_column)
 
                 if (
                     new_row < 0
@@ -63,7 +63,7 @@ def find_longest_hike(
 
                 new_route = f"{route}{position_string}:"
 
-                if [new_row, new_column] == end:
+                if new_position == end:
                     complete_paths.append(new_route)
 
                 # Need to find equivalent paths here...
@@ -79,7 +79,7 @@ def find_longest_hike(
                         break
 
                 if not found:
-                    new_paths.append([new_route, new_position])
+                    new_paths.append((new_route, new_position))
                     paths_updated = True
 
             paths = new_paths
@@ -120,20 +120,20 @@ def find_longest_hike2(
     slippery: bool,
     show_progress: bool = False,
 ) -> int:
-    paths = []
-    complete_paths = []
-    start = [0, 1]
+    paths: List[Tuple[str, Tuple[int, int]]] = []
+    complete_paths: List[str] = []
+    start = (0, 1)
     rows = len(grid)
     columns = len(grid[0])
-    end = [rows - 1, columns - 2]
+    end = (rows - 1, columns - 2)
     offsets = [[0, 1], [1, 0], [0, -1], [-1, 0]]
 
-    paths.append([":0,1:", start])
+    paths.append((":0,1:", start))
     paths_updated = True
 
     while paths_updated:
         paths_updated = False
-        new_paths = []
+        new_paths: List[Tuple[str, Tuple[int, int]]] = []
 
         for path in paths:
             route = path[0]
@@ -142,7 +142,7 @@ def find_longest_hike2(
             for offset in offsets:
                 new_row = position[0] + offset[0]
                 new_column = position[1] + offset[1]
-                new_position = [new_row, new_column]
+                new_position = (new_row, new_column)
 
                 if (
                     new_row < 0
@@ -176,7 +176,7 @@ def find_longest_hike2(
 
                 new_route = add_position_to_route(route, position_string)
 
-                if [new_row, new_column] == end:
+                if new_position == end:
                     complete_paths.append(new_route)
 
                 # Need to find equivalent paths here...
@@ -188,17 +188,14 @@ def find_longest_hike2(
                         break
 
                 if not found:
-                    new_paths.append([new_route, new_position])
+                    new_paths.append((new_route, new_position))
                     paths_updated = True
 
             paths = new_paths
 
         if show_progress and len(paths) > 0:
-            print(
-                "Current best",
-                len(paths),
-                max([len(path[0].split(":")) - 3 for path in paths]),
-            )
+            longest = max([len(path[0].split(":")) - 3 for path in paths])
+            print(f"Paths: {len(paths):>5}  Longest: {longest}")
 
     print("Best", [len(path[1:-1].split(":")) - 1 for path in complete_paths])
     return max([len(path[1:-1].split(":")) - 1 for path in complete_paths])
@@ -208,7 +205,7 @@ def main(day: int, input_path: str, input_type: str):
     with open(f"{input_path}/{input_type}/Day{day:02}.txt", "r") as f:
         lines = f.readlines()
 
-    grid = []
+    grid: List[List[str]] = []
 
     for line in lines:
         line = line.strip("\n")

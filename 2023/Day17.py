@@ -1,30 +1,30 @@
 from pathlib import PurePath
-from typing import List
+from typing import Any, Dict, List
 
 
-def new_position(x: int, y: int, history: str, loss: int) -> dict:
+def new_position(x: int, y: int, history: str, loss: int) -> Dict[str, Any]:
     return {"x": x, "y": y, "h": history, "l": loss}
 
 
 def lowest_loss(
     grid: List[List[int]], rows: int, columns: int, depth: int, starting_loss: int
 ) -> int:
-    previous_positions = {}
-    positions = [new_position(0, 0, "---", 0)]
+    previous_positions: Dict[str, Any] = {}
+    positions: List[Dict[str, Any]] = [new_position(0, 0, "---", 0)]
     end_key = f"{columns-1:>3}{rows-1:>3}"
     end_loss = starting_loss
     rounds = 0
 
     while positions:
-        new_positions = []
+        new_positions: List[Dict[str, Any]] = []
 
         for position in positions:
-            x = position["x"]
-            y = position["y"]
+            x: int = position["x"]
+            y: int = position["y"]
             history = position["h"]
-            loss = position["l"]
+            loss: int = position["l"]
 
-            next_positions = []
+            next_positions: List[Dict[str, Any]] = []
 
             # Attempt to go in each direction
             if history[-1] != "L" and history != "RRR" and x + 1 < columns:
@@ -81,7 +81,7 @@ def main(day: int, input_path: str, input_type: str):
     with open(f"{input_path}/{input_type}/Day{day:02}.txt", "r") as f:
         lines = f.readlines()
 
-    grid = []
+    grid: List[List[int]] = []
 
     for line in lines:
         line = line.strip("\n")
