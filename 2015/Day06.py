@@ -1,10 +1,10 @@
 from pathlib import PurePath
-from typing import List, Tuple
 
-Point = Tuple[int, int]
+Point = tuple[int, int]
+Lights = list[list[int]]
 
 
-def get_coordinates(line: str) -> Tuple[Point, Point]:
+def get_coordinates(line: str) -> tuple[Point, Point]:
     parts = line.split()
 
     if parts[0] == "turn":
@@ -17,19 +17,19 @@ def get_coordinates(line: str) -> Tuple[Point, Point]:
     return (x1, y1), (x2, y2)
 
 
-def turn(lights: List[List[int]], on: bool, p0: Point, p1: Point):
+def turn(lights: Lights, on: bool, p0: Point, p1: Point):
     for x in range(p0[0], p1[0] + 1):
         for y in range(p0[1], p1[1] + 1):
             lights[x][y] = 1 if on else 0
 
 
-def toggle(lights: List[List[int]], p0: Point, p1: Point):
+def toggle(lights: Lights, p0: Point, p1: Point):
     for x in range(p0[0], p1[0] + 1):
         for y in range(p0[1], p1[1] + 1):
             lights[x][y] = 1 - lights[x][y]
 
 
-def change_brightness(lights: List[List[int]], delta: int, p0: Point, p1: Point):
+def change_brightness(lights: Lights, delta: int, p0: Point, p1: Point):
     for x in range(p0[0], p1[0] + 1):
         for y in range(p0[1], p1[1] + 1):
             if delta > 0:

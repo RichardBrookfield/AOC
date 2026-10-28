@@ -1,8 +1,7 @@
 from itertools import permutations
 from pathlib import PurePath
-from typing import Dict, Tuple
 
-Adjustments = Dict[Tuple[str, str], int]
+Adjustments = dict[tuple[str, str], int]
 
 
 def find_happiness(people: set[str], adjustments: Adjustments) -> int:

@@ -1,9 +1,8 @@
 import hashlib
 from pathlib import PurePath
-from typing import Tuple
 
 
-def find_hash(input: str) -> Tuple[int, int]:
+def find_hash(input: str) -> tuple[int, int]:
     answer5 = 0
     answer6 = 0
 

@@ -1,7 +1,6 @@
 from pathlib import PurePath
-from typing import Dict, Tuple
 
-Reindeer = Dict[str, Tuple[int, int, int]]
+Reindeer = dict[str, tuple[int, int, int]]
 
 
 def main(day: int, input_path: str, input_type: str):

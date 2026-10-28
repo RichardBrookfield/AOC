@@ -1,5 +1,4 @@
 from pathlib import PurePath
-from typing import Set
 
 
 def valid_password(password: str) -> bool:
@@ -8,7 +7,7 @@ def valid_password(password: str) -> bool:
         return False
 
     # Check for at least two different pairs of repeated characters
-    pairs: Set[str] = set()
+    pairs: set[str] = set()
     i = 0
     while i < len(password) - 1:
         if password[i] == password[i + 1]:

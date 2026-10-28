@@ -1,7 +1,6 @@
 from pathlib import PurePath
-from typing import Dict
 
-CACHE: Dict[str, str] = {}
+CACHE: dict[str, str] = {}
 CACHE_KEY_MAX_LENGTH = 100
 
 

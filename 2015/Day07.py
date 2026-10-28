@@ -1,5 +1,6 @@
 from pathlib import PurePath
-from typing import Dict, List
+
+Registers = dict[str, int]
 
 
 # Two's complement for numbers from 0 to 65535 (16 bits)
@@ -7,7 +8,7 @@ def bitwise_not(value: int) -> int:
     return ~value & 0xFFFF
 
 
-def process_instruction(line: str, registers: Dict[str, int]) -> bool:
+def process_instruction(line: str, registers: Registers) -> bool:
     try:
         instruction, register = line.split(" -> ")
         instructions = instruction.split(" ")
@@ -48,9 +49,9 @@ def process_instruction(line: str, registers: Dict[str, int]) -> bool:
 
 
 def process_instructions(
-    lines: List[str], registers: Dict[str, int], output_register: str
+    lines: list[str], registers: Registers, output_register: str
 ) -> int:
-    unprocessed_lines: List[str] = []
+    unprocessed_lines: list[str] = []
 
     lines_to_process = lines.copy()
 
@@ -69,7 +70,7 @@ def main(day: int, input_path: str, input_type: str):
     with open(f"{input_path}/{input_type}/Day{day:02}.txt", "r") as f:
         lines = f.readlines()
 
-    registers: Dict[str, int] = {}
+    registers: Registers = {}
 
     output_register = "a" if input_type == "Puzzle" else "i"
     output_value = process_instructions(

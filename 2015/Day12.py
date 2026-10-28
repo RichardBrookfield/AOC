@@ -14,7 +14,10 @@ def sum_numbers(data: Any, ignore_red: bool) -> int:
         return (
             0
             if ignore_red and "red" in values.values()
-            else sum(sum_numbers(data=value, ignore_red=ignore_red) for value in values.values())
+            else sum(
+                sum_numbers(data=value, ignore_red=ignore_red)
+                for value in values.values()
+            )
         )
     else:
         return 0

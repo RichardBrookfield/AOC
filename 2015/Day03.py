@@ -1,8 +1,7 @@
 from pathlib import PurePath
-from typing import Dict, Tuple
 
-Position = Tuple[int, int]
-Deliveries = Dict[Position, int]
+Position = tuple[int, int]
+Deliveries = dict[Position, int]
 
 
 def calculate_deliveries(line: str) -> Deliveries:
@@ -45,7 +44,9 @@ def main(day: int, input_path: str, input_type: str):
         if len(line) % 2 != 0:
             continue
 
-        deliveries = calculate_deliveries(line=line[0::2]) | calculate_deliveries(line=line[1::2])
+        deliveries = calculate_deliveries(line=line[0::2]) | calculate_deliveries(
+            line=line[1::2]
+        )
         # print("Total deliveries: ", len(deliveries))
 
     print(f"{input_type:>6} Part 2: {len(deliveries)}")

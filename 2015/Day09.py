@@ -1,13 +1,14 @@
 from pathlib import PurePath
-from typing import Dict, Set
+
+Routes = dict[str, int]
 
 
 def main(day: int, input_path: str, input_type: str):
     with open(f"{input_path}/{input_type}/Day{day:02}.txt", "r") as f:
         lines = f.readlines()
 
-    places: Set[str] = set()
-    distances: Dict[str, int] = {}
+    places: set[str] = set()
+    distances: dict[str, int] = {}
 
     for line in [line.rstrip("\n") for line in lines]:
         route, distance = line.split(" = ")
@@ -18,11 +19,11 @@ def main(day: int, input_path: str, input_type: str):
         distances["/".join(reversed(endpoints))] = distance
 
     routes_extended = True
-    routes: Dict[str, int] = {place: 0 for place in places}
+    routes: Routes = {place: 0 for place in places}
 
     while routes_extended:
         routes_extended = False
-        new_routes: Dict[str, int] = {}
+        new_routes: Routes = {}
 
         for route, distance in routes.items():
             endpoints = route.split("/")
