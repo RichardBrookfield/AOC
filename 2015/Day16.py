@@ -63,5 +63,4 @@ if __name__ == "__main__":
     day = int(here.name[3:5])
     input_path = f"../../AOCdata/{here.parent.name}"
 
-    # main(day=day, input_path=input_path, input_type="Test")
     main(day=day, input_path=input_path, input_type="Puzzle")

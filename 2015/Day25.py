@@ -34,7 +34,10 @@ def main(day: int, input_path: str, input_type: str):
     n = find_value(target_row=target_row, target_column=target_column)
 
     if input_type == "Test":
-        assert n == 10600672
+        assert 10600672 == n
+        assert 33511524 == find_value(target_row=1, target_column=6)
+        assert 15514188 == find_value(target_row=2, target_column=5)
+        assert 1601130 == find_value(target_row=3, target_column=3)
 
     print(f"{input_type:>6} Part 1: {n}")
 
