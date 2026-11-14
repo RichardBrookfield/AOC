@@ -132,7 +132,7 @@ def hit_boss_and_boss_attack(
 ) -> Outcome:
     assert (attack is None) ^ (effect is None)
 
-    if apply_effects_kills_boss(player, boss):
+    if apply_effects_kills_boss(player=player, boss=boss):
         return Outcome.BOSS_DIES
 
     if (
@@ -161,7 +161,7 @@ def run_tests():
         hit_boss_and_boss_attack(
             player=player,
             boss=boss,
-            effect=find_effect_by_name("Poison"),
+            effect=find_effect_by_name(effect_name="Poison"),
         )
         == Outcome.NO_OUTCOME
     )
@@ -173,7 +173,7 @@ def run_tests():
         hit_boss_and_boss_attack(
             player=player,
             boss=boss,
-            attack=find_attack_by_name("Magic Missile"),
+            attack=find_attack_by_name(attack_name="Magic Missile"),
         )
         == Outcome.BOSS_DIES
     )
@@ -186,7 +186,7 @@ def run_tests():
         hit_boss_and_boss_attack(
             player=player,
             boss=boss,
-            effect=find_effect_by_name("Recharge"),
+            effect=find_effect_by_name(effect_name="Recharge"),
         )
         == Outcome.NO_OUTCOME
     )
@@ -198,7 +198,7 @@ def run_tests():
         hit_boss_and_boss_attack(
             player=player,
             boss=boss,
-            effect=find_effect_by_name("Shield"),
+            effect=find_effect_by_name(effect_name="Shield"),
         )
         == Outcome.NO_OUTCOME
     )
@@ -211,7 +211,7 @@ def run_tests():
         hit_boss_and_boss_attack(
             player=player,
             boss=boss,
-            attack=find_attack_by_name("Drain"),
+            attack=find_attack_by_name(attack_name="Drain"),
         )
         == Outcome.NO_OUTCOME
     )
@@ -225,7 +225,7 @@ def run_tests():
         hit_boss_and_boss_attack(
             player=player,
             boss=boss,
-            effect=find_effect_by_name("Poison"),
+            effect=find_effect_by_name(effect_name="Poison"),
         )
         == Outcome.NO_OUTCOME
     )
@@ -238,7 +238,7 @@ def run_tests():
         hit_boss_and_boss_attack(
             player=player,
             boss=boss,
-            attack=find_attack_by_name("Magic Missile"),
+            attack=find_attack_by_name(attack_name="Magic Missile"),
         )
         == Outcome.BOSS_DIES
     )

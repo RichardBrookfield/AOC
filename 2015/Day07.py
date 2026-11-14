@@ -20,9 +20,9 @@ def process_instruction(line: str, registers: Registers) -> bool:
                 registers[register] = registers[instructions[0]]
         elif len(instructions) == 2:
             if instructions[0].isnumeric():
-                registers[register] = bitwise_not(int(instructions[1]))
+                registers[register] = bitwise_not(value=int(instructions[1]))
             else:
-                registers[register] = bitwise_not(registers[instructions[1]])
+                registers[register] = bitwise_not(value=registers[instructions[1]])
         elif len(instructions) == 3:
             if instructions[0].isnumeric():
                 operand1 = int(instructions[0])
@@ -57,7 +57,7 @@ def process_instructions(
 
     while lines_to_process:
         for line in [line.rstrip("\n") for line in lines_to_process]:
-            if not process_instruction(line, registers):
+            if not process_instruction(line=line, registers=registers):
                 unprocessed_lines.append(line)
 
         lines_to_process = unprocessed_lines

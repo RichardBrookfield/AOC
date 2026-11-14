@@ -21,7 +21,9 @@ def fill_containers(
 
         if container <= remaining:
             fill_containers(
-                remaining - container, i + 1, current_combination + [container]
+                remaining=remaining - container,
+                first_container=i + 1,
+                current_combination=current_combination + [container],
             )
 
 
